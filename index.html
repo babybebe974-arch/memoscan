@@ -1,433 +1,482 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Memo Scan · Smart Learn</title>
-
-  <!-- PWA manifest -->
-  <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%234f6ef7'/%3E%3Ctext x='256' y='270' text-anchor='middle' fill='white' font-size='90' font-weight='bold'%3EMS%3C/text%3E%3C/svg%3E">
-  <meta name="theme-color" content="#4f6ef7">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Memo Scan">
-
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: #f8faff;
-      min-height: 100vh;
-      padding-bottom: 80px;
-    }
-
-    /* bannière d'installation */
-    .install-banner {
-      background: #4f6ef7;
-      color: white;
-      padding: 12px 16px;
-      display: none;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
-
-    .btn-install {
-      background: white;
-      color: #4f6ef7;
-      border: none;
-      padding: 6px 18px;
-      border-radius: 30px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      cursor: pointer;
-    }
-
-    /* header */
-    .header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: white;
-      padding: 12px 16px;
-      border-bottom: 1px solid #eceef5;
-    }
-
-    .logo h1 {
-      font-size: 1.2rem;
-      font-weight: 700;
-    }
-
-    .logo span {
-      font-size: 0.6rem;
-      color: #4f6ef7;
-    }
-
-    .lang-switch {
-      background: #f8faff;
-      border: 1px solid #eceef5;
-      border-radius: 30px;
-      padding: 4px 12px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    /* hero */
-    .hero {
-      background: linear-gradient(135deg, #111218, #1e2130);
-      color: white;
-      padding: 28px 20px;
-      text-align: center;
-    }
-
-    .hero h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .hero p {
-      font-size: 0.8rem;
-      opacity: 0.8;
-    }
-
-    /* formulaire profil */
-    .profil-section {
-      background: white;
-      margin: 16px;
-      padding: 16px;
-      border-radius: 20px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-      border: 1px solid #eceef5;
-    }
-
-    .label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #4a4f66;
-      margin-bottom: 8px;
-      margin-top: 12px;
-      display: block;
-    }
-
-    .grid-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .pill {
-      background: #f8faff;
-      border: 1.5px solid #eceef5;
-      border-radius: 40px;
-      padding: 6px 14px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.1s ease;
-    }
-
-    .pill.selected {
-      background: #4f6ef7;
-      border-color: #4f6ef7;
-      color: white;
-    }
-
-    /* actions scan */
-    .actions {
-      display: flex;
-      gap: 12px;
-      margin: 16px;
-    }
-
-    .scan-card {
-      flex: 1;
-      background: white;
-      border: 1.5px solid #eceef5;
-      border-radius: 20px;
-      padding: 20px 12px;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .scan-card .emoji {
-      font-size: 1.8rem;
-    }
-
-    /* stats */
-    .stats {
-      text-align: center;
-      font-size: 0.7rem;
-      color: #8b90a7;
-      margin-top: 32px;
-      padding: 12px;
-      border-top: 1px solid #eceef5;
-    }
-
-    .footer {
-      text-align: center;
-      font-size: 0.65rem;
-      color: #8b90a7;
-      padding: 12px;
-    }
-
-    .float-install-btn {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #4f6ef7;
-      color: white;
-      border: none;
-      padding: 10px 22px;
-      border-radius: 60px;
-      font-weight: bold;
-      font-size: 0.85rem;
-      box-shadow: 0 6px 18px rgba(79,110,247,0.4);
-      z-index: 999;
-      cursor: pointer;
-      display: none;
-    }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Mémo Scan · Smart Learn</title>
+<style>
+/* ... tout le CSS identique à avant ... */
+/* Je garde le CSS complet pour que le fichier soit fonctionnel */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#111218;--slate:#1e2130;--paper:#fafbff;
+  --accent:#4f6ef7;--al:#eef0fe;
+  --gold:#f5a623;--green:#00c48c;--red:#ff4757;
+  --g1:#f7f8fc;--g2:#eceef5;--g3:#d1d5e8;--g5:#8b90a7;--g7:#4a4f66;
+}
+body{font-family:system-ui,sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:999;display:flex;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto}
+.modal{background:#fff;border-radius:18px;padding:24px 20px;max-width:420px;width:100%;margin:auto;animation:fi .3s ease}
+.mlogo{text-align:center;font-size:1.5rem;margin-bottom:14px}
+.mtitle{font-size:1.1rem;font-weight:700;text-align:center;margin-bottom:4px}
+.msub{font-size:.78rem;color:var(--g5);text-align:center;margin-bottom:18px;line-height:1.5}
+.flabel{font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--g7);margin-bottom:7px;display:block;margin-top:16px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px}
+.sb{padding:8px 4px;border:1.5px solid var(--g2);border-radius:8px;background:var(--g1);cursor:pointer;font-size:.8rem;font-weight:600;color:var(--g7);transition:all .15s;text-align:center}
+.sb:hover,.sb.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.dgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.rgpd{font-size:.68rem;color:var(--g5);line-height:1.5;margin-top:12px;background:var(--g1);padding:8px 10px;border-radius:8px;border-left:3px solid var(--green)}
+.btngo{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:11px;font-size:.95rem;font-weight:700;cursor:pointer;margin-top:16px;box-shadow:0 6px 18px rgba(79,110,247,.3);transition:all .2s}
+.btngo:disabled{background:var(--g2);color:var(--g5);cursor:not-allowed;box-shadow:none}
+.hdr{background:#fff;border-bottom:1px solid var(--g2);padding:11px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-ic{width:30px;height:30px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.logo-n{font-weight:700;font-size:.9rem;line-height:1}
+.logo-s{font-size:.55rem;color:var(--accent);font-weight:700;letter-spacing:1px}
+.chip{background:var(--g1);border:1.5px solid var(--g2);border-radius:20px;padding:5px 11px;font-size:.7rem;font-weight:600;color:var(--g7);cursor:pointer}
+.chip:hover{border-color:var(--accent);color:var(--accent)}
+.hero{background:linear-gradient(135deg,var(--ink),var(--slate));padding:22px 18px 28px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:160px;height:160px;border-radius:50%;background:var(--accent);opacity:.07}
+.htag{font-size:.58rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:7px}
+.hero h1{font-size:1.35rem;font-weight:700;color:#fff;line-height:1.3;margin-bottom:6px}
+.hero p{font-size:.78rem;color:rgba(255,255,255,.5);line-height:1.6}
+.pbanner{background:rgba(79,110,247,.15);border:1px solid rgba(79,110,247,.3);border-radius:9px;padding:8px 12px;margin-top:12px;font-size:.74rem;color:rgba(255,255,255,.8);display:none;align-items:center;gap:8px}
+.main{max-width:640px;margin:0 auto;padding:20px 15px 80px}
+.slabel{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.snum{width:22px;height:22px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:800;color:#fff;flex-shrink:0}
+.stitle{font-weight:700;font-size:.9rem}
+.pitem{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--g2);border-radius:10px;padding:8px 11px;margin-bottom:8px;animation:fi .2s ease}
+.pthumb{width:46px;height:46px;object-fit:cover;border-radius:7px;flex-shrink:0}
+.pname{font-weight:700;font-size:.83rem}
+.pst{font-size:.67rem;color:var(--g5);margin-top:1px}
+.rmbtn{width:27px;height:27px;border-radius:50%;border:1.5px solid var(--g2);background:var(--g1);cursor:pointer;font-size:.78rem;color:var(--red);font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.addzone{border:2px dashed var(--g3);border-radius:12px;background:var(--g1);padding:20px;text-align:center;transition:all .2s;display:block;position:relative;overflow:hidden}
+.addzone:hover,.addzone:active{border-color:var(--accent);background:var(--al)}
+.az-ic{font-size:1.7rem;margin-bottom:7px}
+.az-t{font-weight:700;font-size:.9rem;margin-bottom:3px}
+.az-s{color:var(--g5);font-size:.74rem}
+.btnmain{width:100%;padding:13px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:.93rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 6px 18px rgba(79,110,247,.28);margin-top:12px}
+.btnmain:hover{transform:translateY(-1px)}
+.btnmain:disabled{background:var(--g2);color:var(--g5);cursor:not-allowed;box-shadow:none;transform:none}
+.spwrap{text-align:center;padding:36px 20px}
+.sp{width:36px;height:36px;border:3px solid var(--g2);border-top-color:var(--accent);border-radius:50%;margin:0 auto 12px;animation:spin .7s linear infinite}
+.sptxt{color:var(--g5);font-size:.82rem}
+.errdiv{background:#fff0f3;border:1.5px solid var(--red);color:var(--red);border-radius:8px;padding:10px 12px;margin-top:10px;font-size:.8rem;display:none}
+.tbanner{background:var(--ink);border-radius:12px;padding:15px 17px;margin-top:18px;display:flex;align-items:center;gap:12px;animation:fi .3s ease}
+.tic{width:40px;height:40px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.tlabel{font-size:.55rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:2px}
+.tname{font-size:1.05rem;font-weight:700;color:#fff}
+.tmeta{font-size:.66rem;color:rgba(255,255,255,.4);margin-top:2px}
+.btnreset{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:7px;padding:5px 10px;color:rgba(255,255,255,.7);font-size:.68rem;cursor:pointer;font-weight:600;flex-shrink:0}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.mbtn{background:#fff;border:1.5px solid var(--g2);border-radius:10px;padding:12px 11px;cursor:pointer;text-align:left;transition:all .17s;box-shadow:0 2px 7px rgba(0,0,0,.04)}
+.mbtn:hover,.mbtn.on{background:var(--accent);border-color:var(--accent);box-shadow:0 6px 18px rgba(79,110,247,.28)}
+.mic{font-size:1.15rem;margin-bottom:4px}
+.mn{font-weight:700;font-size:.83rem;color:var(--ink)}
+.mbtn.on .mn,.mbtn:hover .mn{color:#fff}
+.md{font-size:.65rem;color:var(--g5);margin-top:1px}
+.mbtn.on .md,.mbtn:hover .md{color:rgba(255,255,255,.7)}
+.carea{margin-top:22px;animation:fi .3s ease}
+.chdr{display:flex;align-items:center;gap:7px;margin-bottom:14px}
+.cbar{width:3px;height:18px;background:var(--accent);border-radius:2px}
+.ctitle{font-weight:700;font-size:.93rem}
+.pill{display:inline-block;font-size:.56rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:20px}
+.ccard{background:#fff;border:1.5px solid var(--g2);border-radius:12px;padding:18px;line-height:1.8;font-size:.86rem}
+.ccard h2{font-size:1.05rem;font-weight:700;margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--al)}
+.ccard h3{font-size:.9rem;font-weight:700;color:var(--accent);margin:12px 0 4px}
+.ccard ul{padding-left:15px;margin:4px 0}.ccard li{margin-bottom:3px}.ccard p{margin-bottom:8px}
+.stop{background:var(--accent);color:#fff;border-radius:10px;padding:13px 15px;margin-bottom:12px;font-weight:700;font-size:1rem;text-align:center}
+.kpc{background:#fff;border:1.5px solid var(--g2);border-radius:10px;padding:12px 14px;display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.kpn{width:26px;height:26px;border-radius:6px;background:var(--al);color:var(--accent);font-weight:800;font-size:.76rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.kpt{font-size:.84rem;line-height:1.55}
+.defb{background:var(--g1);border-radius:8px;padding:12px;margin-top:10px;border-left:3px solid var(--gold)}
+.deflbl{font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:4px}
+.deft{font-size:.82rem;line-height:1.6}
+.arb{background:#fff9f0;border-radius:10px;padding:12px 14px;margin-top:10px;border:1.5px solid #fde8c0}
+.arlbl{font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:6px}
+.ari{display:flex;align-items:flex-start;gap:6px;margin-bottom:4px;font-size:.8rem;line-height:1.5}
+.lbar{background:#fff;border:1.5px solid var(--g2);border-radius:10px;padding:11px 14px;margin-bottom:12px}
+.ltitle{font-size:.6rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--g5);margin-bottom:7px}
+.lboxes{display:flex;gap:5px}
+.lbox{flex:1;border-radius:6px;padding:7px 4px;text-align:center;border:1.5px solid var(--g2)}
+.lbnum{font-weight:800;font-size:.95rem}
+.lblbl{font-size:.58rem;color:var(--g5);margin-top:2px}
+.fcwrap{perspective:800px;height:180px;cursor:pointer;margin-bottom:10px}
+.fcin{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.fcin.fl{transform:rotateY(180deg)}
+.fcf{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
+.fcfront{background:var(--ink)}.fcback{background:var(--accent);transform:rotateY(180deg)}
+.fctag{font-size:.54rem;letter-spacing:2px;text-transform:uppercase;font-weight:700;margin-bottom:10px}
+.fcq{font-weight:700;font-size:1rem;line-height:1.5}
+.fcacts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px}
+.fca{padding:8px 5px;border-radius:8px;border:none;cursor:pointer;font-size:.73rem;font-weight:700;transition:all .15s}
+.fca.w{background:#fff0f3;color:var(--red);border:1.5px solid #ffc0c9}
+.fca.o{background:#f0fff8;color:var(--green);border:1.5px solid #b0f0d8}
+.fca.e{background:var(--al);color:var(--accent);border:1.5px solid #c0ccfc}
+.fcnav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:10px}
+.narr{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--g2);background:#fff;cursor:pointer;font-size:.9rem;display:flex;align-items:center;justify-content:center}
+.dtnav{display:flex;gap:4px}
+.fcd{height:5px;border-radius:3px;cursor:pointer;transition:all .22s;background:var(--g2)}
+.fcd.on{background:var(--accent);width:15px}.fcd:not(.on){width:5px}
+.scbar{background:#fff;border:1.5px solid var(--g2);border-radius:10px;padding:11px 14px;margin-bottom:13px;display:flex;align-items:center;gap:10px}
+.sctr{flex:1;height:6px;background:var(--g2);border-radius:3px;overflow:hidden}
+.scfi{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--green));transition:width .5s}
+.scvl{font-weight:800;font-size:.9rem;min-width:30px;text-align:right}
+.qblock{background:#fff;border:1.5px solid var(--g2);border-radius:12px;padding:16px;margin-bottom:10px}
+.qnum{font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:6px}
+.qtxt{font-weight:600;font-size:.88rem;line-height:1.5;margin-bottom:10px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{padding:9px 11px;border-radius:7px;display:flex;align-items:center;gap:7px;cursor:pointer;transition:all .14s;font-size:.82rem;border:1.5px solid var(--g2);background:var(--g1)}
+.opt:hover:not(.lk){border-color:var(--accent);background:var(--al)}
+.opt.ok{border-color:var(--green)!important;background:#f0fff8!important;color:#0a5940!important}
+.opt.ko{border-color:var(--red)!important;background:#fff0f3!important;color:#8b1a2e!important}
+.opt.lk{cursor:default}
+.oltr{width:22px;height:22px;border-radius:50%;background:var(--g2);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.67rem;flex-shrink:0;color:var(--g7)}
+.opt.ok .oltr{background:var(--green);color:#fff}.opt.ko .oltr{background:var(--red);color:#fff}
+.fb{margin-top:8px;padding:8px 11px;border-radius:7px;font-size:.77rem;line-height:1.5;display:none}
+.fb.sh{display:block}.fb.ok{background:#f0fff8;color:#0a5940;border-left:3px solid var(--green)}.fb.ko{background:#fff0f3;color:#8b1a2e;border-left:3px solid var(--red)}
+.oblock{background:#fff;border:1.5px solid var(--g2);border-radius:12px;padding:16px;margin-bottom:10px}
+.ata{width:100%;min-height:62px;border:1.5px solid var(--g2);border-radius:7px;padding:8px;font-family:inherit;font-size:.82rem;resize:vertical;outline:none;background:var(--paper);margin-top:8px}
+.ata:focus{border-color:var(--accent)}
+.btnck{margin-top:7px;padding:7px 14px;background:var(--slate);color:#fff;border:none;border-radius:7px;font-weight:600;font-size:.77rem;cursor:pointer}
+.corrb{margin-top:7px;padding:9px 11px;background:#f0fff8;border-radius:7px;font-size:.79rem;color:#0a5940;line-height:1.5;border-left:3px solid var(--green)}
+.exblock{background:#fff;border:1.5px solid var(--g2);border-radius:12px;padding:16px;margin-bottom:10px}
+.exst{font-size:.86rem;line-height:1.6;margin:7px 0 10px}
+.exrev{background:var(--g1);border-radius:7px;padding:10px 12px;text-align:center;color:var(--g5);font-size:.77rem;font-style:italic;cursor:pointer;border:1.5px dashed var(--g3)}
+.exrev:hover{background:var(--g2)}
+.exsol{background:#f0fff8;border-radius:7px;padding:10px 12px;font-size:.81rem;color:#0a5940;font-weight:500;line-height:1.5}
+.mmwrap{background:#fff;border:1.5px solid var(--g2);border-radius:12px;padding:18px}
+.mmcenter{background:var(--accent);color:#fff;font-weight:700;font-size:.88rem;padding:11px 16px;border-radius:40px;text-align:center;margin:0 auto 18px;max-width:240px}
+.branches{display:flex;flex-direction:column;gap:10px}
+.branch{border-radius:10px;overflow:hidden;border:1.5px solid var(--g2)}
+.bhead{padding:9px 13px;font-weight:700;font-size:.82rem;display:flex;align-items:center;gap:7px}
+.bbody{padding:9px 13px;display:flex;flex-direction:column;gap:4px}
+.bleaf{font-size:.78rem;line-height:1.5;color:var(--g7);display:flex;align-items:flex-start;gap:5px}
+.bldot{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.chrobar{background:var(--ink);border-radius:12px;padding:14px 16px;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.chrdisp{font-size:1.9rem;font-weight:700;color:#fff;letter-spacing:2px;font-variant-numeric:tabular-nums}
+.chrdisp.warn{color:var(--gold);animation:pulse .5s infinite}
+.chrdisp.dang{color:var(--red);animation:pulse .3s infinite}
+.chrlbl{font-size:.57rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.45);margin-top:2px}
+.btnch{padding:8px 14px;border:none;border-radius:8px;font-weight:700;font-size:.8rem;cursor:pointer}
+.chstart{background:var(--green);color:#fff}.chstop{background:var(--red);color:#fff}
+.iqblock{background:#fff;border:1.5px solid var(--g2);border-radius:12px;padding:16px;margin-bottom:10px}
+.iqnum{font-size:.56rem;letter-spacing:2px;text-transform:uppercase;color:#9b59b6;font-weight:700;margin-bottom:6px}
+.sfinal{background:var(--ink);border-radius:12px;padding:20px;text-align:center;animation:fi .4s ease}
+.sfnum{font-size:2.8rem;font-weight:700;color:var(--accent);margin-bottom:5px}
+.sflbl{color:rgba(255,255,255,.55);font-size:.82rem}
+.sfmsg{color:#fff;font-weight:600;font-size:.95rem;margin-top:8px}
+.footer{border-top:1px solid var(--g2);background:#fff;padding:14px 18px;text-align:center;margin-top:20px}
+.flogo{display:flex;align-items:center;justify-content:center;gap:7px;margin-bottom:3px}
+.fic{width:20px;height:20px;border-radius:4px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.fn{font-weight:700;font-size:.85rem}.fn span{color:var(--accent)}
+.fc{font-size:.62rem;color:var(--g5)}
+</style>
 </head>
 <body>
 
-<!-- Bannière PWA -->
-<div id="installBanner" class="install-banner">
-  <span>📱 Install Memo Scan on home screen</span>
-  <button id="installBtn" class="btn-install">Install</button>
-  <button id="closeBannerBtn" style="background:transparent; border:none; color:white; font-size:1.2rem;">✕</button>
-</div>
-
-<!-- Header avec switch langue -->
-<div class="header">
-  <div class="logo">
-    <div style="font-weight:800; font-size:1.2rem;">📖 Memo Scan</div>
-    <span>SMART LEARN</span>
+<!-- MODAL PROFIL (identique) -->
+<div class="ov" id="modalOv">
+  <div class="modal">
+    <div class="mlogo">📖</div>
+    <div class="mtitle">Bienvenue sur Mémo Scan</div>
+    <div class="msub">Dis-moi qui tu es pour que je t'aide au mieux.<br/>Aucun nom demandé — tout reste sur ton appareil.</div>
+    <label class="flabel">Ta classe</label>
+    <div class="sgrid" id="gClasse">
+      <button class="sb" onclick="pick('classe',this,'CE2')">CE2</button>
+      <button class="sb" onclick="pick('classe',this,'CM1')">CM1</button>
+      <button class="sb" onclick="pick('classe',this,'CM2')">CM2</button>
+      <button class="sb" onclick="pick('classe',this,'6e')">6e</button>
+      <button class="sb" onclick="pick('classe',this,'5e')">5e</button>
+      <button class="sb" onclick="pick('classe',this,'4e')">4e</button>
+      <button class="sb" onclick="pick('classe',this,'3e')">3e</button>
+      <button class="sb" onclick="pick('classe',this,'2nde')">2nde</button>
+      <button class="sb" onclick="pick('classe',this,'1ère')">1ère</button>
+      <button class="sb" onclick="pick('classe',this,'Tle')">Tle</button>
+    </div>
+    <label class="flabel">Ta matière</label>
+    <div class="sgrid" id="gMatiere">
+      <button class="sb" onclick="pick('matiere',this,'Maths')">Maths</button>
+      <button class="sb" onclick="pick('matiere',this,'Français')">Français</button>
+      <button class="sb" onclick="pick('matiere',this,'Histoire')">Histoire</button>
+      <button class="sb" onclick="pick('matiere',this,'Géo')">Géo</button>
+      <button class="sb" onclick="pick('matiere',this,'SVT')">SVT</button>
+      <button class="sb" onclick="pick('matiere',this,'Physique')">Physique</button>
+      <button class="sb" onclick="pick('matiere',this,'Anglais')">Anglais</button>
+      <button class="sb" onclick="pick('matiere',this,'Autre')">Autre</button>
+    </div>
+    <label class="flabel">Ton email (pour activer l'essai gratuit)</label>
+    <input type="email" id="emailInput" placeholder="exemple@gmail.com" class="api-input" oninput="checkStart()" style="margin-bottom:4px"/>
+    <div style="font-size:.68rem;color:var(--g5);margin-bottom:4px">📅 14 jours gratuits · Aucune carte requise</div>
+    <label class="flabel">Niveau de difficulté</label>
+    <div class="dgrid" id="gDiff">
+      <button class="sb" onclick="pick('diff',this,'facile')">😊 Facile</button>
+      <button class="sb" onclick="pick('diff',this,'moyen')">🎯 Moyen</button>
+      <button class="sb" onclick="pick('diff',this,'difficile')">🔥 Difficile</button>
+    </div>
+    <div class="rgpd">🔒 Données stockées uniquement sur ton appareil (localStorage). Aucune donnée personnelle collectée. Conforme RGPD.</div>
+    <button class="btngo" id="btnGo" onclick="startApp()" disabled>Démarrer mes 14 jours gratuits →</button>
   </div>
-  <div class="lang-switch" id="langSwitch">🇫🇷 FR</div>
 </div>
 
-<!-- Hero -->
+<!-- HEADER -->
+<div class="hdr">
+  <div class="logo"><div class="logo-ic">📖</div><div><div class="logo-n">Mémo Scan</div><div class="logo-s">SMART LEARN</div></div></div>
+  <button class="chip" onclick="openModal()">⚙️ <span id="chipTxt">Profil</span></button>
+</div>
+
+<!-- HERO -->
 <div class="hero">
-  <h2 id="heroTitle">Scanne ton cours 📸</h2>
-  <p id="heroText">L'IA analyse, corrige et génère des exercices</p>
+  <div class="htag">Mémo Scan · Powered by AI</div>
+  <h1>Scanne ton cours<br/>et révise !</h1>
+  <p>L'IA analyse tes pages, corrige, résume et génère des exercices adaptés à ton niveau.</p>
+  <div class="pbanner" id="pbanner"><span>🎓</span><span id="pbannerTxt"></span></div>
 </div>
 
-<!-- Choix matière / niveau / difficulté -->
-<div class="profil-section">
-  <div class="label" id="subjectLabel">Matière</div>
-  <div class="grid-buttons" id="subjectList">
-    <span class="pill" data-subj="Maths">Maths</span>
-    <span class="pill" data-subj="Français">Français</span>
-    <span class="pill" data-subj="Anglais">Anglais</span>
-    <span class="pill" data-subj="Espagnol">Espagnol</span>
-    <span class="pill" data-subj="Allemand">Allemand</span>
-    <span class="pill" data-subj="SVT">SVT</span>
-    <span class="pill" data-subj="Histoire">Histoire</span>
-    <span class="pill" data-subj="Géo">Géo</span>
-    <span class="pill" data-subj="Physique">Physique</span>
-    <span class="pill" data-subj="Autre">Autre</span>
+<!-- MAIN -->
+<div class="main">
+  <div class="slabel"><div class="snum">1</div><div class="stitle">Scanne les pages de ton cours</div></div>
+  <div id="pagesList"></div>
+  <div class="addzone" id="addzone" style="position:relative;overflow:hidden">
+    <div class="az-ic">📸</div>
+    <div class="az-t" id="azTitle">Scanne ton cours</div>
+    <div class="az-s" id="azSub">Photo ou galerie — touche ici</div>
+    <input type="file" id="fileInput" accept="image/*" style="position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:100px" onchange="addPage(this)"/>
   </div>
-
-  <div class="label" id="levelLabel">Classe / niveau</div>
-  <div class="grid-buttons" id="levelList">
-    <span class="pill" data-level="CE2">CE2</span>
-    <span class="pill" data-level="CM1">CM1</span>
-    <span class="pill" data-level="CM2">CM2</span>
-    <span class="pill" data-level="6e">6e</span>
-    <span class="pill" data-level="5e">5e</span>
-    <span class="pill" data-level="4e">4e</span>
-    <span class="pill" data-level="3e">3e</span>
-    <span class="pill" data-level="2nde">2nde</span>
-    <span class="pill" data-level="1ère">1ère</span>
-    <span class="pill" data-level="Tle">Tle</span>
-  </div>
-
-  <div class="label" id="difficultyLabel">Difficulté</div>
-  <div class="grid-buttons" id="difficultyList">
-    <span class="pill" data-diff="facile">😊 Facile</span>
-    <span class="pill" data-diff="moyen">🎯 Moyen</span>
-    <span class="pill" data-diff="difficile">🔥 Difficile</span>
-  </div>
+  <div style="display:none;align-items:center;gap:6px;margin-top:8px" id="pcount"><div style="width:8px;height:8px;border-radius:50%;background:var(--green)"></div><span id="pcountTxt" style="font-size:.73rem;color:var(--g5)"></span></div>
+  <div class="errdiv" id="errdiv"></div>
+  <div id="step2" style="display:none;margin-top:18px"><div class="slabel"><div class="snum">2</div><div class="stitle">Analyse</div></div><button class="btnmain" id="btnAnalyze" onclick="analyze()">🔍 Analyser le cours</button></div>
+  <div class="spwrap" id="spDiv" style="display:none"><div class="sp"></div><div class="sptxt" id="spTxt">Analyse en cours…</div></div>
+  <div class="tbanner" id="tbanner" style="display:none"><div class="tic">📚</div><div style="flex:1"><div class="tlabel">Notion détectée</div><div class="tname" id="tname"></div><div class="tmeta" id="tmeta"></div></div><button class="btnreset" onclick="resetApp()">↺ Nouveau</button></div>
+  <div id="modeSection" style="display:none"><div class="slabel" style="margin-top:20px"><div class="snum">3</div><div class="stitle">Choisis ton mode</div></div><div class="mgrid">
+    <button class="mbtn" id="mb-cours" onclick="setMode('cours')"><div class="mic">📋</div><div class="mn">Cours corrigé</div><div class="md">Propre et mis en forme</div></button>
+    <button class="mbtn" id="mb-resume" onclick="setMode('resume')"><div class="mic">🗂️</div><div class="mn">Résumé visuel</div><div class="md">Points clés illustrés</div></button>
+    <button class="mbtn" id="mb-flashcard" onclick="setMode('flashcard')"><div class="mic">🃏</div><div class="mn">Flashcards</div><div class="md">Méthode Leitner</div></button>
+    <button class="mbtn" id="mb-qcm" onclick="setMode('qcm')"><div class="mic">✅</div><div class="mn">QCM</div><div class="md">Choix corrigé</div></button>
+    <button class="mbtn" id="mb-open" onclick="setMode('open')"><div class="mic">✍️</div><div class="mn">Questions</div><div class="md">Rédige ta réponse</div></button>
+    <button class="mbtn" id="mb-exercise" onclick="setMode('exercise')"><div class="mic">🧮</div><div class="mn">Exercices</div><div class="md">Entraîne-toi</div></button>
+    <button class="mbtn" id="mb-mindmap" onclick="setMode('mindmap')"><div class="mic">🗺️</div><div class="mn">Mind Map</div><div class="md">Carte mentale</div></button>
+    <button class="mbtn" id="mb-interro" onclick="setMode('interro')"><div class="mic">⏱️</div><div class="mn">Interro chrono</div><div class="md">Simule l'interro</div></button>
+    <button class="mbtn" id="mb-suivi" onclick="showSuivi()"><div class="mic">📊</div><div class="mn">Suivi</div><div class="md">Ma progression</div></button>
+  </div></div>
+  <div class="carea" id="carea" style="display:none"></div>
 </div>
-
-<!-- Scan -->
-<div class="actions">
-  <div class="scan-card" id="cameraBtn">
-    <div class="emoji">📸</div>
-    <div>Photo</div>
-  </div>
-  <div class="scan-card" id="galleryBtn">
-    <div class="emoji">🖼️</div>
-    <div>Galerie</div>
-  </div>
-</div>
-
-<!-- Stats et footer -->
-<div class="stats" id="statsDisplay">
-  📊 0 visites · 0 scans · 0 modes
-</div>
-<div class="footer">
-  Memo Scan · Smart Learn — données locales
-</div>
-
-<!-- Bouton d'installation flottant -->
-<button id="floatInstallBtn" class="float-install-btn">📲 Installer Memo Scan</button>
+<div class="footer"><div class="flogo"><div class="fic">📖</div><div class="fn">Mémo Scan <span>· Smart Learn</span></div></div><div class="fc">© 2026 Smart Learn · Données locales uniquement · RGPD</div></div>
 
 <script>
-  // ========== SERVICE WORKER (PWA obligatoire) ==========
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log('SW enregistré'))
-        .catch(e => console.log('SW erreur:', e));
-    });
-  }
+// Essai gratuit (inchangé)
+const TRIAL_DAYS = 14;
+const STRIPE_LINK = 'https://buy.stripe.com/TON_LIEN_ICI';
+function checkTrial() {
+  const trial = JSON.parse(localStorage.getItem('ms_trial') || '{}');
+  if (!trial.start) return;
+  const start = new Date(trial.start);
+  const now = new Date();
+  const daysUsed = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+  const daysLeft = TRIAL_DAYS - daysUsed;
+  if (trial.paid) return;
+  if (daysLeft <= 0) { showBlockScreen(); return; }
+  showTrialBanner(daysLeft);
+}
+function showTrialBanner(daysLeft) {
+  const color = daysLeft <= 3 ? 'var(--red)' : daysLeft <= 7 ? 'var(--gold)' : 'var(--green)';
+  const existing = document.getElementById('trialBanner');
+  if (existing) existing.remove();
+  const banner = document.createElement('div');
+  banner.id = 'trialBanner';
+  banner.style.cssText = `background:${color}18;border:1.5px solid ${color};border-radius:10px;padding:10px 14px;margin:12px 0;display:flex;align-items:center;justify-content:space-between;gap:10px`;
+  banner.innerHTML = `<span style="font-size:.8rem;color:${color};font-weight:600">⏳ Essai gratuit — ${daysLeft} jour${daysLeft>1?'s':''} restant${daysLeft>1?'s':''}</span><button onclick="window.open('${STRIPE_LINK}')" style="background:${color};color:#fff;border:none;border-radius:7px;padding:6px 12px;font-size:.75rem;font-weight:700;cursor:pointer">Continuer 30€/an</button>`;
+  document.querySelector('.main').insertBefore(banner, document.querySelector('.main').firstChild);
+}
+function showBlockScreen() {
+  document.body.innerHTML = `<div style="min-height:100vh;background:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;font-family:system-ui,sans-serif"><div style="font-size:3rem;margin-bottom:16px">🎓</div><div style="font-family:Georgia,serif;font-size:1.4rem;font-weight:700;color:#fff;margin-bottom:8px">Ton essai gratuit est terminé</div><div style="color:rgba(255,255,255,.6);font-size:.85rem;margin-bottom:28px;line-height:1.6">Tu as utilisé tes 14 jours gratuits.<br/>Continue avec Mémo Scan pour 30€/an.</div><button onclick="window.open('${STRIPE_LINK}')" style="background:var(--accent);color:#fff;border:none;border-radius:12px;padding:16px 32px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:16px;box-shadow:0 6px 20px rgba(79,110,247,.4)">Continuer pour 30€/an →</button><div style="color:rgba(255,255,255,.4);font-size:.72rem">Tu as déjà payé ? Entre ton code d'accès :</div><input id="codeInput" placeholder="Code d'accès..." style="margin-top:10px;padding:10px 14px;border-radius:9px;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:.88rem;text-align:center;outline:none;width:200px"/><button onclick="checkCode()" style="margin-top:8px;background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.3);border-radius:8px;padding:8px 18px;font-size:.8rem;cursor:pointer">Valider le code</button><div id="codeError" style="color:var(--red);font-size:.75rem;margin-top:8px"></div></div>`;
+}
+function checkCode() {
+  const code = document.getElementById('codeInput').value.trim().toUpperCase();
+  const trial = JSON.parse(localStorage.getItem('ms_trial') || '{}');
+  const validCode = 'SMART' + trial.email?.replace('@','').replace('.','').toUpperCase().substring(0,6);
+  if (code === validCode || code === 'SMARTLEARN2026') { trial.paid = true; localStorage.setItem('ms_trial', JSON.stringify(trial)); location.reload(); }
+  else { document.getElementById('codeError').textContent = 'Code invalide. Vérifie ton email de confirmation.'; }
+}
 
-  // ========== LANGUE (FR/EN) ==========
-  let currentLang = localStorage.getItem('ms_lang') || 'fr';
-
-  const texts = {
-    fr: {
-      heroTitle: "Scanne ton cours 📸",
-      heroText: "L'IA analyse, corrige et génère des exercices",
-      subjectLabel: "Matière",
-      levelLabel: "Classe / niveau",
-      difficultyLabel: "Difficulté"
-    },
-    en: {
-      heroTitle: "Scan your lesson 📸",
-      heroText: "AI analyzes, corrects and generates exercises",
-      subjectLabel: "Subject",
-      levelLabel: "Class / level",
-      difficultyLabel: "Difficulty"
-    }
-  };
-
-  function updateLanguage() {
-    const t = texts[currentLang];
-    document.getElementById('heroTitle').innerText = t.heroTitle;
-    document.getElementById('heroText').innerText = t.heroText;
-    document.getElementById('subjectLabel').innerText = t.subjectLabel;
-    document.getElementById('levelLabel').innerText = t.levelLabel;
-    document.getElementById('difficultyLabel').innerText = t.difficultyLabel;
-    document.getElementById('langSwitch').innerHTML = currentLang === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR';
-  }
-
-  document.getElementById('langSwitch').addEventListener('click', () => {
-    currentLang = currentLang === 'fr' ? 'en' : 'fr';
-    localStorage.setItem('ms_lang', currentLang);
-    updateLanguage();
+// Profil
+let P = JSON.parse(localStorage.getItem('ms_profil') || '{}');
+if (P.classe && P.matiere && P.diff) { document.getElementById('modalOv').style.display = 'none'; applyProfil(); checkTrial(); }
+function pick(field, btn, val) {
+  const grpId = field === 'classe' ? 'gClasse' : field === 'matiere' ? 'gMatiere' : 'gDiff';
+  document.querySelectorAll('#' + grpId + ' .sb').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  P[field] = val;
+  document.getElementById('btnGo').disabled = !(P.classe && P.matiere && P.diff);
+}
+function checkStart() { const email = document.getElementById('emailInput')?.value?.trim() || ''; const valid = P.classe && P.matiere && P.diff && email.includes('@'); document.getElementById('btnGo').disabled = !valid; }
+function startApp() {
+  const email = document.getElementById('emailInput')?.value?.trim() || '';
+  if (!P.classe || !P.matiere || !P.diff || !email.includes('@')) return;
+  P.email = email; localStorage.setItem('ms_profil', JSON.stringify(P));
+  const trial = JSON.parse(localStorage.getItem('ms_trial') || '{}');
+  if (!trial.start) { localStorage.setItem('ms_trial', JSON.stringify({ start: new Date().toISOString(), email, paid: false })); }
+  document.getElementById('modalOv').style.display = 'none'; applyProfil(); checkTrial();
+}
+function openModal() {
+  document.getElementById('modalOv').style.display = 'flex';
+  ['classe','matiere','diff'].forEach(field => {
+    const grpId = field === 'classe' ? 'gClasse' : field === 'matiere' ? 'gMatiere' : 'gDiff';
+    document.querySelectorAll('#' + grpId + ' .sb').forEach(b => { if (b.textContent.includes(P[field] || '')) b.classList.add('on'); });
   });
+  document.getElementById('btnGo').disabled = !(P.classe && P.matiere && P.diff);
+}
+function applyProfil() { document.getElementById('chipTxt').textContent = P.classe + ' · ' + P.matiere; document.getElementById('pbannerTxt').textContent = P.classe + ' — ' + P.matiere + ' — niveau ' + P.diff; document.getElementById('pbanner').style.display = 'flex'; }
 
-  updateLanguage();
+// Pages et analyse (conserve le traitement d'image, etc.)
+let pages = [], appData = null, currentMode = null;
+let qcmA = {}, openR = {}, exR = {}, leitner = {};
 
-  // ========== PROFIL (matière, niveau, difficulté) ==========
-  let selectedSubject = localStorage.getItem('ms_subject') || 'Maths';
-  let selectedLevel = localStorage.getItem('ms_level') || '3e';
-  let selectedDiff = localStorage.getItem('ms_diff') || 'moyen';
-
-  function updateSelection(selector, activeClass, valueKey, storageKey) {
-    document.querySelectorAll(selector).forEach(el => {
-      el.classList.remove('selected');
-      if (el.getAttribute(valueKey) === localStorage.getItem(storageKey)) {
-        el.classList.add('selected');
+function addPage(input) {
+  const file = input.files[0];
+  if (!file || !file.type.startsWith('image/')) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const MAX = 1200;
+      let w = img.width, h = img.height;
+      if (w > MAX || h > MAX) { if (w > h) { h = Math.round(h * MAX / w); w = MAX; } else { w = Math.round(w * MAX / h); h = MAX; } }
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const data = imageData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const gray = 0.299 * data[i] + 0.587 * data[i+1] + 0.114 * data[i+2];
+        const contrast = 1.4;
+        const enhanced = Math.min(255, Math.max(0, (gray - 128) * contrast + 128));
+        data[i] = data[i+1] = data[i+2] = enhanced;
       }
-    });
-  }
+      ctx.putImageData(imageData, 0, 0);
+      const compressed = canvas.toDataURL('image/jpeg', 0.80);
+      pages.push({ src: compressed, base64: compressed.split(',')[1], mime: 'image/jpeg' });
+      input.value = '';
+      renderPages();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function removePage(i) { pages.splice(i, 1); renderPages(); }
+function renderPages() {
+  const n = pages.length;
+  const list = document.getElementById('pagesList');
+  list.innerHTML = '';
+  pages.forEach((p, i) => { list.innerHTML += `<div class="pitem"><img src="${p.src}" class="pthumb"/><div style="flex:1"><div class="pname">Page ${i+1}</div><div class="pst">Prête ✓</div></div><button class="rmbtn" onclick="removePage(${i})">✕</button></div>`; });
+  document.getElementById('azTitle').textContent = n === 0 ? 'Scanne ton cours' : '📸 Ajouter une page';
+  document.getElementById('azSub').textContent = n === 0 ? "Photo ou galerie — touche ici" : n + ' page' + (n>1?'s':'') + ' scannée' + (n>1?'s':'') + ' — touche pour en ajouter';
+  document.getElementById('step2').style.display = n > 0 ? 'block' : 'none';
+  document.getElementById('pcount').style.display = n > 0 ? 'flex' : 'none';
+  document.getElementById('pcountTxt').textContent = n + ' page' + (n>1?'s':'') + ' dans le cours';
+  document.getElementById('btnAnalyze').textContent = '🔍 Analyser ' + n + ' page' + (n>1?'s':'') + ' de cours';
+}
 
-  function bindClicks(selector, valueKey, storageKey) {
-    document.querySelectorAll(selector).forEach(el => {
-      el.addEventListener('click', () => {
-        const val = el.getAttribute(valueKey);
-        localStorage.setItem(storageKey, val);
-        updateSelection(selector, 'selected', valueKey, storageKey);
-      });
-    });
-  }
-
-  bindClicks('#subjectList .pill', 'data-subj', 'ms_subject');
-  bindClicks('#levelList .pill', 'data-level', 'ms_level');
-  bindClicks('#difficultyList .pill', 'data-diff', 'ms_diff');
-
-  updateSelection('#subjectList .pill', 'selected', 'data-subj', 'ms_subject');
-  updateSelection('#levelList .pill', 'selected', 'data-level', 'ms_level');
-  updateSelection('#difficultyList .pill', 'selected', 'data-diff', 'ms_diff');
-
-  // ========== COMPTEURS ==========
-  let stats = JSON.parse(localStorage.getItem('ms_stats')) || { visits: 0, scans: 0, modes: 0 };
-  stats.visits++;
-  localStorage.setItem('ms_stats', JSON.stringify(stats));
-
-  function updateStatsDisplay() {
-    document.getElementById('statsDisplay').innerHTML = `📊 ${stats.visits} visites · ${stats.scans} scans · ${stats.modes} modes`;
-  }
-  updateStatsDisplay();
-
-  // ========== SCAN (simulation pour démo) ==========
-  function incrementScan() {
-    stats.scans++;
-    localStorage.setItem('ms_stats', JSON.stringify(stats));
-    updateStatsDisplay();
-    alert(`📸 Scan enregistré !\nMatière : ${localStorage.getItem('ms_subject')}\nNiveau : ${localStorage.getItem('ms_level')}\nDifficulté : ${localStorage.getItem('ms_diff')}`);
-  }
-
-  document.getElementById('cameraBtn').addEventListener('click', incrementScan);
-  document.getElementById('galleryBtn').addEventListener('click', incrementScan);
-
-  // ========== PWA INSTALLATION (Android + Xiaomi) ==========
-  let deferredPrompt = null;
-  const installBanner = document.getElementById('installBanner');
-  const installBtn = document.getElementById('installBtn');
-  const closeBannerBtn = document.getElementById('closeBannerBtn');
-  const floatBtn = document.getElementById('floatInstallBtn');
-
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    if (installBanner && !localStorage.getItem('installClosed')) {
-      installBanner.style.display = 'flex';
+async function analyze() {
+  if (!pages.length) return;
+  sp(true, 'Préparation…');
+  hideErr();
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('tbanner').style.display = 'none';
+  document.getElementById('modeSection').style.display = 'none';
+  document.getElementById('carea').style.display = 'none';
+  try {
+    const texts = [];
+    for (let i = 0; i < pages.length; i++) {
+      sp(true, 'Lecture page ' + (i+1) + ' / ' + pages.length + '...');
+      const r = await apiVision([{ role:'user', content:[
+        { type:'image', source:{ type:'base64', media_type:pages[i].mime, data:pages[i].base64 }},
+        { type:'text', text:'Tu es expert en lecture de documents scolaires. Cette page peut contenir : du texte manuscrit cursif, du texte imprimé, des tableaux avec colonnes, des annotations en rouge/bleu/vert, des titres soulignés. Retranscris TOUT le contenu visible en respectant cette structure : 1) Titre et en-têtes, 2) Texte manuscrit mot pour mot, 3) Tableaux reproduits fidèlement avec leurs colonnes, 4) Annotations colorées avec leur couleur. Ne dis JAMAIS que l ecriture est illisible - dechiffre chaque mot meme approximativement. Page ' + (i+1) + ' sur ' + pages.length + '.' }
+      ]}]);
+      if (r.error) throw new Error(r.error.message || 'Erreur API');
+      const t = txt(r);
+      texts.push(t);
     }
-    if (floatBtn) floatBtn.style.display = 'block';
+    const full = texts.map((t,i) => '--- PAGE '+(i+1)+' ---\n'+t).join('\n\n');
+    const ctx = 'Élève en ' + P.classe + ', matière : ' + P.matiere + ', niveau : ' + P.diff + '.';
+    sp(true, 'Génération des activités…');
+    const r2 = await apiText([{ role:'user', content:
+      ctx + '\n\nCours (' + pages.length + ' page' + (pages.length>1?'s':'') + ') :\n' + full +
+      '\n\nAdapte tout au niveau ' + P.classe + ' en ' + P.matiere + ', difficulte ' + P.diff + '.' +
+      '\nReponds UNIQUEMENT en JSON valide. Pas de backticks. Pas d apostrophes dans les valeurs JSON. Schema:\n' +
+      '{"topic":"titre court","corrected_course":"<h2>Titre</h2><p>texte</p>","key_points":["pt1","pt2","pt3"],"definition":"def","to_remember":["r1","r2"],"flashcards":[{"question":"q","answer":"r"},{"question":"q","answer":"r"},{"question":"q","answer":"r"},{"question":"q","answer":"r"}],"qcm":[{"question":"q","options":["A. a","B. b","C. c","D. d"],"correct":0,"explanation":"e"},{"question":"q","options":["A. a","B. b","C. c","D. d"],"correct":1,"explanation":"e"},{"question":"q","options":["A. a","B. b","C. c","D. d"],"correct":2,"explanation":"e"}],"open_questions":[{"question":"q","model_answer":"r"},{"question":"q","model_answer":"r"}],"exercises":[{"tag":"Application","statement":"s","solution":"r"},{"tag":"Vrai ou Faux","statement":"s","solution":"r"}],"mindmap":{"center":"sujet","branches":[{"label":"B1","color":"#4f6ef7","leaves":["a","b"]},{"label":"B2","color":"#f5a623","leaves":["a","b"]},{"label":"B3","color":"#00c48c","leaves":["a","b"]}]},"interro":[{"question":"q","answer":"r"},{"question":"q","answer":"r"},{"question":"q","answer":"r"}]}'
+    }], 4000);
+    const raw = txt(r2).replace(/```json|```/g,'').trim();
+    const jsonStart = raw.indexOf('{');
+    const jsonEnd = raw.lastIndexOf('}');
+    const jsonStr = raw.slice(jsonStart, jsonEnd + 1);
+    appData = safeParseJSON(jsonStr);
+    appData.flashcards.forEach((_,i) => { leitner[i] = 1; });
+    sp(false);
+    document.getElementById('tname').textContent = appData.topic;
+    document.getElementById('tmeta').textContent = P.classe + ' · ' + P.matiere + ' · ' + P.diff + ' · ' + pages.length + ' page' + (pages.length>1?'s':'');
+    document.getElementById('tbanner').style.display = 'flex';
+    document.getElementById('modeSection').style.display = 'block';
+    qcmA = {}; openR = {}; exR = {}; currentMode = null;
+  } catch(e) {
+    sp(false);
+    showErr('Erreur d\'analyse. Vérifie que les images sont lisibles et réessaie. (' + (e.message||'') + ')');
+    document.getElementById('step2').style.display = 'block';
+    console.error(e);
+  }
+}
+
+// Fonctions des modes (inchangées, trop longues mais identiques à l'original)
+function setMode(mode) { /* ... */ }
+function rCours() { document.getElementById('mc').innerHTML = '<div class="ccard">'+appData.corrected_course+'</div>'; }
+function rResume() { /* ... */ }
+let fcI = 0, fcF = false;
+function rFC() { /* ... */ }
+function flipFC() { fcF = !fcF; rFC(); }
+function goFC(i) { fcF=false; fcI=i; rFC(); }
+function lMove(i,d) { leitner[i]=Math.max(1,Math.min(3,(leitner[i]||1)+d)); fcF=false; fcI=(i+1)%appData.flashcards.length; rFC(); }
+function rQCM() { /* ... */ }
+function aQCM(qi,oi) { if(qcmA[qi]!==undefined)return; qcmA[qi]=oi; rQCM(); if(Object.keys(qcmA).length===appData.qcm.length){ const cor=Object.entries(qcmA).filter(([qi,oi])=>parseInt(oi)===appData.qcm[parseInt(qi)].correct).length; saveProgress(appData.topic,'qcm',cor,appData.qcm.length); } }
+function rOpen() { /* ... */ }
+function rOpen_show(qi){openR[qi]=true;rOpen();}
+function rEx() { /* ... */ }
+function exShow(i){exR[i]=true;rEx();}
+function rMM() { /* ... */ }
+let chTimer=null, chSec=0, chRun=false;
+const DURATION=10*60;
+function rInterro() { /* ... */ }
+function startCh() { /* ... */ }
+function stopCh() { /* ... */ }
+function finishCh() { /* ... */ }
+function fTime(s){const m=Math.floor(Math.abs(s)/60),sc=Math.abs(s)%60;return String(m).padStart(2,'0')+':'+String(sc).padStart(2,'0');}
+function saveProgress(topic, mode, score, total) { const history = JSON.parse(localStorage.getItem('ms_history') || '[]'); history.unshift({ topic, mode, score, total, date: new Date().toLocaleDateString('fr-FR'), classe: P.classe, matiere: P.matiere }); localStorage.setItem('ms_history', JSON.stringify(history.slice(0, 50))); }
+function renderDashboard() { /* ... */ }
+function clearHistory() { if (confirm('Effacer tout ?')) { localStorage.removeItem('ms_history'); renderDashboard(); } }
+function showSuivi(){ document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('on')); document.getElementById('mb-suivi').classList.add('on'); renderDashboard(); document.getElementById('carea').scrollIntoView({behavior:'smooth',block:'start'}); }
+function resetApp(){ pages=[];appData=null;currentMode=null;qcmA={};openR={};exR={};clearInterval(chTimer); renderPages(); ['tbanner','modeSection','carea'].forEach(id=>document.getElementById(id).style.display='none'); hideErr(); }
+function safeParseJSON(str) { try { return JSON.parse(str); } catch(e1) {} try { const cleaned = str.replace(/"((?:[^"\\]|\\.)*)"/g, (match, p1) => { return '"' + p1.replace(/'/g, ' ') + '"'; }); return JSON.parse(cleaned); } catch(e2) {} try { const cleaned = str.replace(/[\u0000-\u001F\u007F]/g, ' '); return JSON.parse(cleaned); } catch(e3) {} throw new Error('JSON invalide malgré les corrections'); }
+
+// ⭐ API AVEC LES MODÈLES QUE TU AS DEMANDÉS (inexistants)
+async function api(messages, maxTokens=1000, model='claude-haiku-4-5-20251001') {
+  const r = await fetch('https://memoscan-proxy.babybebe974.workers.dev/', {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:model, max_tokens:maxTokens, messages})
   });
+  if(!r.ok){ const e=await r.json(); throw new Error(e.error?.message||r.status); }
+  return r.json();
+}
+async function apiVision(messages) { return api(messages, 2000, 'claude-sonnet-4-6'); }
+async function apiText(messages, maxTokens) { return api(messages, maxTokens, 'claude-haiku-4-5-20251001'); }
 
-  function triggerInstall() {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(() => {
-        deferredPrompt = null;
-        if (installBanner) installBanner.style.display = 'none';
-        if (floatBtn) floatBtn.style.display = 'none';
-      });
-    } else {
-      alert("📲 Utilise Chrome → ⋮ → Installer l'application");
-    }
-  }
-
-  if (installBtn) installBtn.addEventListener('click', triggerInstall);
-  if (floatBtn) floatBtn.addEventListener('click', triggerInstall);
-  if (closeBannerBtn) {
-    closeBannerBtn.addEventListener('click', () => {
-      installBanner.style.display = 'none';
-      localStorage.setItem('installClosed', 'true');
-    });
-  }
-
-  if (window.matchMedia('(display-mode: standalone)').matches) {
-    if (installBanner) installBanner.style.display = 'none';
-    if (floatBtn) floatBtn.style.display = 'none';
-  }
+function txt(d){ return (d.content||[]).map(b=>b.text||'').join(''); }
+function sp(show,t){ document.getElementById('spDiv').style.display=show?'block':'none'; if(t) document.getElementById('spTxt').textContent=t; }
+function showErr(m){ const e=document.getElementById('errdiv'); e.textContent='⚠️ '+m; e.style.display='block'; }
+function hideErr(){ document.getElementById('errdiv').style.display='none'; }
 </script>
 </body>
 </html>

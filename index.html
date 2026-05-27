@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Memo Scan · Smart Learn</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      background: #f8faff;
+      min-height: 100vh;
+    }
+
+    /* bannière d'installation */
+    .install-banner {
+      background: #4f6ef7;
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .btn-install {
+      background: white;
+      color: #4f6ef7;
+      border: none;
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    /* hero */
+    .hero {
+      background: linear-gradient(135deg, #111218, #1e2130);
+      color: white;
+      padding: 32px 20px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .hero .tagline {
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+
+    /* cartes actions */
+    .main {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .card {
+      background: white;
+      border: 1.5px solid #eceef5;
+      border-radius: 20px;
+      padding: 24px 12px;
+      text-align: center;
+      flex: 1;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .card .emoji {
+      font-size: 2.2rem;
+      margin-bottom: 8px;
+    }
+
+    .card .title {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    /* stats discrètes */
+    .stats {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #8b90a7;
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid #eceef5;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 0.65rem;
+      color: #8b90a7;
+      padding: 12px;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Bannière d'installation (PWA) -->
+<div id="installBanner" class="install-banner" style="display: none;">
+  <span>📱 Installe Memo Scan sur ton écran</span>
+  <button id="installBtn" class="btn-install">Installer</button>
+</div>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>📖 Memo Scan</h1>
+  <div class="tagline">Scanne ton cours · Révise avec l'IA</div>
+</div>
+
+<!-- Contenu principal -->
+<div class="main">
+  <div class="actions">
+    <div class="card">
+      <div class="emoji">📸</div>
+      <div class="title">Photo</div>
+    </div>
+    <div class="card">
+      <div class="emoji">🖼️</div>
+      <div class="title">Galerie</div>
+    </div>
+  </div>
+
+  <!-- Compteurs (visites, scans, modes) -->
+  <div class="stats" id="statsDisplay">
+    📊 0 visites · 0 scans · 0 modes
+  </div>
+</div>
+
+<div class="footer">
+  Memo Scan · Smart Learn — données locales
+</div>
+
+<script>
+  // ========== COMPTEURS (localStorage) ==========
+  let stats = JSON.parse(localStorage.getItem('ms_stats')) || {
+    visits: 0,
+    scans: 0,
+    modes: 0
+  };
+
+  // incrémenter la visite à chaque ouverture
+  stats.visits++;
+  localStorage.setItem('ms_stats', JSON.stringify(stats));
+
+  // affichage
+  function updateStatsDisplay() {
+    document.getElementById('statsDisplay').innerHTML = `📊 ${stats.visits} visites · ${stats.scans} scans · ${stats.modes} modes`;
+  }
+  updateStatsDisplay();
+
+  // ========== PWA INSTALLATION ==========
+  let deferredPrompt = null;
+
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const banner = document.getElementById('installBanner');
+    if (banner && !localStorage.getItem('installClosed')) {
+      banner.style.display = 'flex';
+    }
+  });
+
+  document.getElementById('installBtn')?.addEventListener('click', async () => {
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        console.log('Memo Scan installée sur écran d accueil');
+      }
+      deferredPrompt = null;
+      document.getElementById('installBanner').style.display = 'none';
+    }
+  });
+
+  // fermeture manuelle de la bannière
+  const closeBtn = document.createElement('button');
+  const banner = document.getElementById('installBanner');
+  if (banner) {
+    closeBtn.textContent = '✕';
+    closeBtn.style.background = 'transparent';
+    closeBtn.style.border = 'none';
+    closeBtn.style.color = 'white';
+    closeBtn.style.fontSize = '1.2rem';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.marginLeft = '8px';
+    banner.appendChild(closeBtn);
+    closeBtn.onclick = () => {
+      banner.style.display = 'none';
+      localStorage.setItem('installClosed', 'true');
+    };
+  }
+
+  // si déjà installée : cacher la bannière
+  if (window.matchMedia('(display-mode: standalone)').matches) {
+    document.getElementById('installBanner')?.remove();
+  }
+</script>
+</body>
+</html>

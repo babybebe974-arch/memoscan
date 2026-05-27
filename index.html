@@ -4,6 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Memo Scan · Smart Learn</title>
+
+  <!-- PWA manifest inline -->
+  <link rel="manifest" href="data:application/json,{
+    \"name\":\"Memo Scan - Smart Learn\",
+    \"short_name\":\"Memo Scan\",
+    \"description\":\"Scanne ton cours, l'IA te génère quiz et flashcards\",
+    \"start_url\":\"/\",
+    \"display\":\"standalone\",
+    \"theme_color\":\"#4f6ef7\",
+    \"background_color\":\"#ffffff\",
+    \"icons\":[{
+      \"src\":\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%234f6ef7'/%3E%3Ctext x='256' y='330' text-anchor='middle' fill='white' font-size='160' font-weight='bold'%3EMS%3C/text%3E%3C/svg%3E\",
+      \"sizes\":\"512x512\",
+      \"type\":\"image/svg+xml\"
+    }]
+  }">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%234f6ef7'/%3E%3Ctext x='256' y='270' text-anchor='middle' fill='white' font-size='90' font-weight='bold'%3EMS%3C/text%3E%3C/svg%3E">
+  <meta name="theme-color" content="#4f6ef7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Memo Scan">
+
   <style>
     * {
       margin: 0;
@@ -15,6 +37,7 @@
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
       background: #f8faff;
       min-height: 100vh;
+      padding-bottom: 80px;
     }
 
     /* bannière d'installation */
@@ -22,7 +45,7 @@
       background: #4f6ef7;
       color: white;
       padding: 12px 16px;
-      display: flex;
+      display: none;
       justify-content: space-between;
       align-items: center;
       position: sticky;
@@ -41,65 +64,126 @@
       cursor: pointer;
     }
 
+    /* header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 12px 16px;
+      border-bottom: 1px solid #eceef5;
+    }
+
+    .logo h1 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .logo span {
+      font-size: 0.6rem;
+      color: #4f6ef7;
+    }
+
+    .lang-switch {
+      background: #f8faff;
+      border: 1px solid #eceef5;
+      border-radius: 30px;
+      padding: 4px 12px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     /* hero */
     .hero {
       background: linear-gradient(135deg, #111218, #1e2130);
       color: white;
-      padding: 32px 20px;
+      padding: 28px 20px;
       text-align: center;
     }
 
-    .hero h1 {
-      font-size: 2rem;
-      font-weight: 800;
+    .hero h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
       margin-bottom: 6px;
     }
 
-    .hero .tagline {
-      font-size: 0.9rem;
+    .hero p {
+      font-size: 0.8rem;
       opacity: 0.8;
     }
 
-    /* cartes actions */
-    .main {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
+    /* formulaire profil */
+    .profil-section {
+      background: white;
+      margin: 16px;
+      padding: 16px;
+      border-radius: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #eceef5;
     }
 
+    .label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #4a4f66;
+      margin-bottom: 8px;
+      margin-top: 12px;
+      display: block;
+    }
+
+    .grid-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      background: #f8faff;
+      border: 1.5px solid #eceef5;
+      border-radius: 40px;
+      padding: 6px 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.1s ease;
+    }
+
+    .pill.selected {
+      background: #4f6ef7;
+      border-color: #4f6ef7;
+      color: white;
+    }
+
+    /* actions scan */
     .actions {
       display: flex;
-      gap: 14px;
-      margin-top: 8px;
+      gap: 12px;
+      margin: 16px;
     }
 
-    .card {
+    .scan-card {
+      flex: 1;
       background: white;
       border: 1.5px solid #eceef5;
       border-radius: 20px;
-      padding: 24px 12px;
+      padding: 20px 12px;
       text-align: center;
-      flex: 1;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+      cursor: pointer;
     }
 
-    .card .emoji {
-      font-size: 2.2rem;
-      margin-bottom: 8px;
+    .scan-card .emoji {
+      font-size: 1.8rem;
     }
 
-    .card .title {
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
-
-    /* stats discrètes */
+    /* stats */
     .stats {
       text-align: center;
       font-size: 0.7rem;
       color: #8b90a7;
       margin-top: 32px;
-      padding-top: 16px;
+      padding: 12px;
       border-top: 1px solid #eceef5;
     }
 
@@ -108,110 +192,245 @@
       font-size: 0.65rem;
       color: #8b90a7;
       padding: 12px;
-      margin-top: 16px;
+    }
+
+    .float-install-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #4f6ef7;
+      color: white;
+      border: none;
+      padding: 10px 22px;
+      border-radius: 60px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      box-shadow: 0 6px 18px rgba(79,110,247,0.4);
+      z-index: 999;
+      cursor: pointer;
+      display: none;
     }
   </style>
 </head>
 <body>
 
-<!-- Bannière d'installation (PWA) -->
-<div id="installBanner" class="install-banner" style="display: none;">
-  <span>📱 Installe Memo Scan sur ton écran</span>
-  <button id="installBtn" class="btn-install">Installer</button>
+<!-- Bannière PWA -->
+<div id="installBanner" class="install-banner">
+  <span>📱 Install Memo Scan on home screen</span>
+  <button id="installBtn" class="btn-install">Install</button>
+  <button id="closeBannerBtn" style="background:transparent; border:none; color:white; font-size:1.2rem;">✕</button>
+</div>
+
+<!-- Header avec switch langue -->
+<div class="header">
+  <div class="logo">
+    <div style="font-weight:800; font-size:1.2rem;">📖 Memo Scan</div>
+    <span>SMART LEARN</span>
+  </div>
+  <div class="lang-switch" id="langSwitch">🇫🇷 FR</div>
 </div>
 
 <!-- Hero -->
 <div class="hero">
-  <h1>📖 Memo Scan</h1>
-  <div class="tagline">Scanne ton cours · Révise avec l'IA</div>
+  <h2 id="heroTitle">Scanne ton cours 📸</h2>
+  <p id="heroText">L'IA analyse, corrige et génère des exercices</p>
 </div>
 
-<!-- Contenu principal -->
-<div class="main">
-  <div class="actions">
-    <div class="card">
-      <div class="emoji">📸</div>
-      <div class="title">Photo</div>
-    </div>
-    <div class="card">
-      <div class="emoji">🖼️</div>
-      <div class="title">Galerie</div>
-    </div>
+<!-- Choix matière / niveau / difficulté -->
+<div class="profil-section">
+  <div class="label" id="subjectLabel">Matière</div>
+  <div class="grid-buttons" id="subjectList">
+    <span class="pill" data-subj="Maths">Maths</span>
+    <span class="pill" data-subj="Français">Français</span>
+    <span class="pill" data-subj="Anglais">Anglais</span>
+    <span class="pill" data-subj="Espagnol">Espagnol</span>
+    <span class="pill" data-subj="Allemand">Allemand</span>
+    <span class="pill" data-subj="SVT">SVT</span>
+    <span class="pill" data-subj="Histoire">Histoire</span>
+    <span class="pill" data-subj="Géo">Géo</span>
+    <span class="pill" data-subj="Physique">Physique</span>
+    <span class="pill" data-subj="Autre">Autre</span>
   </div>
 
-  <!-- Compteurs (visites, scans, modes) -->
-  <div class="stats" id="statsDisplay">
-    📊 0 visites · 0 scans · 0 modes
+  <div class="label" id="levelLabel">Classe / niveau</div>
+  <div class="grid-buttons" id="levelList">
+    <span class="pill" data-level="CE2">CE2</span>
+    <span class="pill" data-level="CM1">CM1</span>
+    <span class="pill" data-level="CM2">CM2</span>
+    <span class="pill" data-level="6e">6e</span>
+    <span class="pill" data-level="5e">5e</span>
+    <span class="pill" data-level="4e">4e</span>
+    <span class="pill" data-level="3e">3e</span>
+    <span class="pill" data-level="2nde">2nde</span>
+    <span class="pill" data-level="1ère">1ère</span>
+    <span class="pill" data-level="Tle">Tle</span>
+  </div>
+
+  <div class="label" id="difficultyLabel">Difficulté</div>
+  <div class="grid-buttons" id="difficultyList">
+    <span class="pill" data-diff="facile">😊 Facile</span>
+    <span class="pill" data-diff="moyen">🎯 Moyen</span>
+    <span class="pill" data-diff="difficile">🔥 Difficile</span>
   </div>
 </div>
 
+<!-- Scan -->
+<div class="actions">
+  <div class="scan-card" id="cameraBtn">
+    <div class="emoji">📸</div>
+    <div>Photo</div>
+  </div>
+  <div class="scan-card" id="galleryBtn">
+    <div class="emoji">🖼️</div>
+    <div>Galerie</div>
+  </div>
+</div>
+
+<!-- Stats et footer -->
+<div class="stats" id="statsDisplay">
+  📊 0 visites · 0 scans · 0 modes
+</div>
 <div class="footer">
   Memo Scan · Smart Learn — données locales
 </div>
 
+<!-- Bouton d'installation flottant -->
+<button id="floatInstallBtn" class="float-install-btn">📲 Installer Memo Scan</button>
+
 <script>
-  // ========== COMPTEURS (localStorage) ==========
-  let stats = JSON.parse(localStorage.getItem('ms_stats')) || {
-    visits: 0,
-    scans: 0,
-    modes: 0
+  // ========== LANGUE (FR/EN) ==========
+  let currentLang = localStorage.getItem('ms_lang') || 'fr';
+
+  const texts = {
+    fr: {
+      heroTitle: "Scanne ton cours 📸",
+      heroText: "L'IA analyse, corrige et génère des exercices",
+      subjectLabel: "Matière",
+      levelLabel: "Classe / niveau",
+      difficultyLabel: "Difficulté"
+    },
+    en: {
+      heroTitle: "Scan your lesson 📸",
+      heroText: "AI analyzes, corrects and generates exercises",
+      subjectLabel: "Subject",
+      levelLabel: "Class / level",
+      difficultyLabel: "Difficulty"
+    }
   };
 
-  // incrémenter la visite à chaque ouverture
+  function updateLanguage() {
+    const t = texts[currentLang];
+    document.getElementById('heroTitle').innerText = t.heroTitle;
+    document.getElementById('heroText').innerText = t.heroText;
+    document.getElementById('subjectLabel').innerText = t.subjectLabel;
+    document.getElementById('levelLabel').innerText = t.levelLabel;
+    document.getElementById('difficultyLabel').innerText = t.difficultyLabel;
+    document.getElementById('langSwitch').innerHTML = currentLang === 'fr' ? '🇬🇧 EN' : '🇫🇷 FR';
+  }
+
+  document.getElementById('langSwitch').addEventListener('click', () => {
+    currentLang = currentLang === 'fr' ? 'en' : 'fr';
+    localStorage.setItem('ms_lang', currentLang);
+    updateLanguage();
+  });
+
+  updateLanguage();
+
+  // ========== PROFIL (matière, niveau, difficulté) ==========
+  let selectedSubject = localStorage.getItem('ms_subject') || 'Maths';
+  let selectedLevel = localStorage.getItem('ms_level') || '3e';
+  let selectedDiff = localStorage.getItem('ms_diff') || 'moyen';
+
+  function updateSelection(selector, activeClass, valueKey, storageKey) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.classList.remove('selected');
+      if (el.getAttribute(valueKey) === localStorage.getItem(storageKey)) {
+        el.classList.add('selected');
+      }
+    });
+  }
+
+  function bindClicks(selector, valueKey, storageKey) {
+    document.querySelectorAll(selector).forEach(el => {
+      el.addEventListener('click', () => {
+        const val = el.getAttribute(valueKey);
+        localStorage.setItem(storageKey, val);
+        updateSelection(selector, 'selected', valueKey, storageKey);
+      });
+    });
+  }
+
+  bindClicks('#subjectList .pill', 'data-subj', 'ms_subject');
+  bindClicks('#levelList .pill', 'data-level', 'ms_level');
+  bindClicks('#difficultyList .pill', 'data-diff', 'ms_diff');
+
+  updateSelection('#subjectList .pill', 'selected', 'data-subj', 'ms_subject');
+  updateSelection('#levelList .pill', 'selected', 'data-level', 'ms_level');
+  updateSelection('#difficultyList .pill', 'selected', 'data-diff', 'ms_diff');
+
+  // ========== COMPTEURS ==========
+  let stats = JSON.parse(localStorage.getItem('ms_stats')) || { visits: 0, scans: 0, modes: 0 };
   stats.visits++;
   localStorage.setItem('ms_stats', JSON.stringify(stats));
 
-  // affichage
   function updateStatsDisplay() {
     document.getElementById('statsDisplay').innerHTML = `📊 ${stats.visits} visites · ${stats.scans} scans · ${stats.modes} modes`;
   }
   updateStatsDisplay();
 
-  // ========== PWA INSTALLATION ==========
+  // ========== SCAN (simulation pour démo) ==========
+  function incrementScan() {
+    stats.scans++;
+    localStorage.setItem('ms_stats', JSON.stringify(stats));
+    updateStatsDisplay();
+    alert(`📸 Scan enregistré !\nMatière : ${localStorage.getItem('ms_subject')}\nNiveau : ${localStorage.getItem('ms_level')}\nDifficulté : ${localStorage.getItem('ms_diff')}`);
+  }
+
+  document.getElementById('cameraBtn').addEventListener('click', incrementScan);
+  document.getElementById('galleryBtn').addEventListener('click', incrementScan);
+
+  // ========== PWA INSTALLATION (Android + Xiaomi) ==========
   let deferredPrompt = null;
+  const installBanner = document.getElementById('installBanner');
+  const installBtn = document.getElementById('installBtn');
+  const closeBannerBtn = document.getElementById('closeBannerBtn');
+  const floatBtn = document.getElementById('floatInstallBtn');
 
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    const banner = document.getElementById('installBanner');
-    if (banner && !localStorage.getItem('installClosed')) {
-      banner.style.display = 'flex';
+    if (installBanner && !localStorage.getItem('installClosed')) {
+      installBanner.style.display = 'flex';
     }
+    if (floatBtn) floatBtn.style.display = 'block';
   });
 
-  document.getElementById('installBtn')?.addEventListener('click', async () => {
+  function triggerInstall() {
     if (deferredPrompt) {
       deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
-      if (outcome === 'accepted') {
-        console.log('Memo Scan installée sur écran d accueil');
-      }
-      deferredPrompt = null;
-      document.getElementById('installBanner').style.display = 'none';
+      deferredPrompt.userChoice.then(() => {
+        deferredPrompt = null;
+        if (installBanner) installBanner.style.display = 'none';
+        if (floatBtn) floatBtn.style.display = 'none';
+      });
+    } else {
+      alert("📲 Utilise Chrome → ⋮ → Installer l'application");
     }
-  });
-
-  // fermeture manuelle de la bannière
-  const closeBtn = document.createElement('button');
-  const banner = document.getElementById('installBanner');
-  if (banner) {
-    closeBtn.textContent = '✕';
-    closeBtn.style.background = 'transparent';
-    closeBtn.style.border = 'none';
-    closeBtn.style.color = 'white';
-    closeBtn.style.fontSize = '1.2rem';
-    closeBtn.style.cursor = 'pointer';
-    closeBtn.style.marginLeft = '8px';
-    banner.appendChild(closeBtn);
-    closeBtn.onclick = () => {
-      banner.style.display = 'none';
-      localStorage.setItem('installClosed', 'true');
-    };
   }
 
-  // si déjà installée : cacher la bannière
+  if (installBtn) installBtn.addEventListener('click', triggerInstall);
+  if (floatBtn) floatBtn.addEventListener('click', triggerInstall);
+  if (closeBannerBtn) {
+    closeBannerBtn.addEventListener('click', () => {
+      installBanner.style.display = 'none';
+      localStorage.setItem('installClosed', 'true');
+    });
+  }
+
   if (window.matchMedia('(display-mode: standalone)').matches) {
-    document.getElementById('installBanner')?.remove();
+    if (installBanner) installBanner.style.display = 'none';
+    if (floatBtn) floatBtn.style.display = 'none';
   }
 </script>
 </body>

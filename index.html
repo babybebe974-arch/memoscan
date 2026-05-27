@@ -5,21 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Memo Scan · Smart Learn</title>
 
-  <!-- PWA manifest inline -->
-  <link rel="manifest" href="data:application/json,{
-    \"name\":\"Memo Scan - Smart Learn\",
-    \"short_name\":\"Memo Scan\",
-    \"description\":\"Scanne ton cours, l'IA te génère quiz et flashcards\",
-    \"start_url\":\"/\",
-    \"display\":\"standalone\",
-    \"theme_color\":\"#4f6ef7\",
-    \"background_color\":\"#ffffff\",
-    \"icons\":[{
-      \"src\":\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%234f6ef7'/%3E%3Ctext x='256' y='330' text-anchor='middle' fill='white' font-size='160' font-weight='bold'%3EMS%3C/text%3E%3C/svg%3E\",
-      \"sizes\":\"512x512\",
-      \"type\":\"image/svg+xml\"
-    }]
-  }">
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' fill='%234f6ef7'/%3E%3Ctext x='256' y='270' text-anchor='middle' fill='white' font-size='90' font-weight='bold'%3EMS%3C/text%3E%3C/svg%3E">
   <meta name="theme-color" content="#4f6ef7">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -299,6 +286,15 @@
 <button id="floatInstallBtn" class="float-install-btn">📲 Installer Memo Scan</button>
 
 <script>
+  // ========== SERVICE WORKER (PWA obligatoire) ==========
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log('SW enregistré'))
+        .catch(e => console.log('SW erreur:', e));
+    });
+  }
+
   // ========== LANGUE (FR/EN) ==========
   let currentLang = localStorage.getItem('ms_lang') || 'fr';
 

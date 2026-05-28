@@ -3,110 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Memo Scan – Essai gratuit</title>
+  <title>Memo Scan – Essai gratuit 14 jours</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    body {
-      background: #fff4e6;
-      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      padding: 1rem;
-    }
-    .card {
-      background: white;
-      max-width: 480px;
-      width: 100%;
-      padding: 2rem 1.8rem;
-      border-radius: 2rem;
-      box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.05);
-      text-align: center;
-      border-top: 6px solid #f97316;
-    }
-    .logo-icon {
-      font-size: 2.8rem;
-      margin-bottom: 0.25rem;
-    }
-    h1 {
-      font-size: 1.9rem;
-      font-weight: 700;
-      color: #c2410c;
-      margin-bottom: 0.25rem;
-    }
-    .sub {
-      color: #f97316;
-      font-weight: 600;
-      margin-bottom: 1.8rem;
-      font-size: 0.95rem;
-      border-bottom: 1px solid #fed7aa;
-      display: inline-block;
-      padding-bottom: 0.4rem;
-    }
-    input {
-      width: 100%;
-      padding: 14px 16px;
-      margin: 10px 0;
-      border: 1.5px solid #fed7aa;
-      border-radius: 40px;
-      font-size: 1rem;
-      background: #fefefc;
-      transition: 0.2s;
-      outline: none;
-    }
-    input:focus {
-      border-color: #f97316;
-      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.2);
-    }
-    button {
-      width: 100%;
-      background: #f97316;
-      color: white;
-      border: none;
-      padding: 14px;
-      border-radius: 40px;
-      font-weight: 700;
-      font-size: 1rem;
-      margin-top: 1.2rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-    button:hover {
-      background: #ea580c;
-      transform: scale(0.98);
-    }
-    .day-counter {
-      margin-top: 1rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #f97316;
-      background: #fff4e6;
-      display: inline-block;
-      padding: 0.3rem 1rem;
-      border-radius: 30px;
-    }
-    .stats {
-      margin-top: 1rem;
-      font-size: 0.7rem;
-      color: #9a3412;
-      border-top: 1px solid #fed7aa;
-      padding-top: 1rem;
-    }
-    .footer {
-      margin-top: 1rem;
-      font-size: 0.7rem;
-      color: #9a3412;
-    }
-    .info-text {
-      font-size: 0.75rem;
-      color: #c2410c;
-      margin-top: 1rem;
-    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#fff4e6;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
+    .card{background:white;max-width:480px;width:100%;padding:2rem 1.8rem;border-radius:2rem;text-align:center;border-top:6px solid #f97316}
+    .logo-icon{font-size:2.8rem;margin-bottom:0.25rem}
+    h1{font-size:1.9rem;font-weight:700;color:#c2410c;margin-bottom:0.25rem}
+    .sub{color:#f97316;font-weight:600;margin-bottom:1.8rem;font-size:0.95rem;border-bottom:1px solid #fed7aa;display:inline-block;padding-bottom:0.4rem}
+    input{width:100%;padding:14px 16px;margin:10px 0;border:1.5px solid #fed7aa;border-radius:40px;font-size:1rem;background:#fefefc;outline:none}
+    input:focus{border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,0.2)}
+    button{width:100%;background:#f97316;color:white;border:none;padding:14px;border-radius:40px;font-weight:700;font-size:1rem;margin-top:1.2rem;cursor:pointer}
+    button:hover{background:#ea580c;transform:scale(0.98)}
+    .info-box{background:#fff0e6;border-radius:1rem;padding:1rem;margin:1rem 0;text-align:left}
+    .info-box p{font-size:0.85rem;color:#7c2d12;margin-bottom:0.5rem}
+    .day-counter{margin-top:1rem;font-size:0.85rem;font-weight:600;color:#f97316;background:#fff4e6;display:inline-block;padding:0.3rem 1rem;border-radius:30px}
+    .stats{margin-top:1rem;font-size:0.7rem;color:#9a3412;border-top:1px solid #fed7aa;padding-top:1rem}
+    .footer{margin-top:1rem;font-size:0.7rem;color:#9a3412}
   </style>
 </head>
 <body>
@@ -115,32 +28,32 @@
   <h1>Memo Scan</h1>
   <div class="sub">Crée ton compte pour un essai gratuit de 14 jours.</div>
 
-  <input type="email" id="email" placeholder="Email" autocomplete="email">
-  <input type="password" id="password" placeholder="Mot de passe" autocomplete="new-password">
+  <input type="email" id="email" placeholder="Ton adresse email" autocomplete="email">
   <button id="registerBtn">Activer mon essai gratuit</button>
+
+  <div class="info-box">
+    <p>✉️ <strong>Pas de mot de passe à retenir</strong> – un <strong>lien magique</strong> va t’être envoyé immédiatement par email.</p>
+    <p>🔗 Clique sur ce lien et tu seras automatiquement connecté(e) à ton espace de révision.</p>
+    <p>🍃 14 jours gratuits, sans carte bancaire, sans engagement.</p>
+  </div>
 
   <div id="dayCounter" class="day-counter"></div>
   <div class="stats" id="statsDisplay">📊 0 visites · 0 scans · 0 modes</div>
-  <div class="info-text">✅ Aucune carte bancaire demandée<br>✅ Tu pourras t'abonner après 14 jours si tu le souhaites</div>
-  <div class="footer">Renseigne ton email et ton mot de passe pour activer ton compte.</div>
+  <div class="footer">Memo Scan · Smart Learn — révise intelligemment</div>
 </div>
 
 <script>
-  // ========== CONFIGURATION (tes URLs personnelles) ==========
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzNS30wu1SA-9UB2JxFcgYOpCR8wTysKoSU2mvQ3wWJFfmTC5lI6Ntol-DQ7Lz5tEtB/exec";
   const WISE_URL   = "https://wise.com/pay/business/smartdesignforyoultd?currency=EUR";
 
-  // ========== COMPTEURS (visites, scans, modes) ==========
   let stats = JSON.parse(localStorage.getItem('ms_stats')) || { visits: 0, scans: 0, modes: 0 };
   stats.visits++;
   localStorage.setItem('ms_stats', JSON.stringify(stats));
-
   function updateStatsDisplay() {
     document.getElementById('statsDisplay').innerHTML = `📊 ${stats.visits} visites · ${stats.scans} scans · ${stats.modes} modes`;
   }
   updateStatsDisplay();
 
-  // ========== GESTION DU COMPTEUR DE JOURS (essai) ==========
   function getTrialDay() {
     const signupDate = localStorage.getItem('ms_signup_date');
     if (!signupDate) return null;
@@ -149,7 +62,6 @@
     const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
     return Math.min(diffDays + 1, 14);
   }
-
   function updateDayCounter() {
     const day = getTrialDay();
     const container = document.getElementById('dayCounter');
@@ -163,46 +75,36 @@
   }
   updateDayCounter();
 
-  // ========== ENVOI D'ACTIVITÉ ==========
-  async function sendActivity(email, isExercice = false) {
+  async function sendActivity(email) {
     if (!email) return;
     try {
       await fetch(SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `action=activity&email=${encodeURIComponent(email)}&exercice=${isExercice}`
+        body: `action=activity&email=${encodeURIComponent(email)}&exercice=false`
       });
     } catch(e) { console.log('activity error', e); }
   }
 
-  // ========== INSCRIPTION ==========
   document.getElementById('registerBtn').addEventListener('click', async () => {
     const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    if (!email || !password) {
-      alert("Veuillez renseigner ton email et ton mot de passe.");
+    if (!email) {
+      alert("Veuillez renseigner ton email.");
       return;
     }
-    if (password.length < 4) {
-      alert("Le mot de passe doit contenir au moins 4 caractères.");
-      return;
-    }
-
     try {
       await fetch(SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `action=register&email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`
+        body: `action=register&email=${encodeURIComponent(email)}`
       });
-      localStorage.setItem('ms_signup_date', new Date().toISOString().slice(0,10));
-      localStorage.setItem('ms_email', email);
-      updateDayCounter();
-      await sendActivity(email, false);
-      alert("✅ Compte créé ! Tu as 14 jours gratuits. Redirection vers la page d'abonnement (29€/an).");
-      window.location.href = WISE_URL;
+      // On ne stocke pas encore la date ici, car l'activation se fera après clic sur lien magique
+      // On redirige vers une page d'information
+      alert("✅ Un lien magique vient d’être envoyé à ton adresse email.\nClique sur ce lien pour activer ton compte et profiter de 14 jours gratuits.");
+      // Optionnel : rediriger vers une page d'attente
+      // window.location.href = "https://babybebe974-arch.github.io/memoscan/waiting.html";
     } catch (err) {
       alert("Erreur lors de l'inscription. Réessaie plus tard.");
       console.error(err);

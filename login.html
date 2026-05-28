@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion automatique – Memo Scan</title>
+  <style>
+    body {
+      background: #fff4e6;
+      font-family: system-ui, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 1rem;
+    }
+    .card {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      max-width: 400px;
+      text-align: center;
+      border-top: 6px solid #f97316;
+      box-shadow: 0 20px 35px -12px rgba(0,0,0,0.05);
+    }
+    .loader {
+      border: 4px solid #fed7aa;
+      border-top: 4px solid #f97316;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin: 1rem auto;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .error {
+      color: #c2410c;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>🔐 Connexion en cours...</h1>
+  <div class="loader"></div>
+  <p>Veuillez patienter, nous activons votre accès.</p>
+</div>
+<script>
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get('token');
+  const email = urlParams.get('email');
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzNS30wu1SA-9UB2JxFcgYOpCR8wTysKoSU2mvQ3wWJFfmTC5lI6Ntol-DQ7Lz5tEtB/exec";
+
+  if (!token || !email) {
+    document.querySelector('p').innerHTML = "❌ Lien invalide. Retourne à la page d'accueil.";
+    document.querySelector('.loader').style.display = 'none';
+    return;
+  }
+
+  async function verifyToken() {
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `action=verify&email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`
+      });
+      const result = await response.text();
+      if (result === 'VALID') {
+        // Stockage local
+        localStorage.setItem('ms_email', email);
+        // On ne stocke pas la date d'inscription ici, car elle est déjà dans le sheet
+        // Redirection vers l'application principale
+        window.location.href = "https://babybebe974-arch.github.io/memoscan/app.html";
+      } else {
+        document.querySelector('h1').innerHTML = "❌ Lien invalide ou expiré";
+        document.querySelector('p').innerHTML = "Retourne à la page d'accueil pour demander un nouveau lien.";
+        document.querySelector('.loader').style.display = 'none';
+      }
+    } catch(e) {
+      document.querySelector('h1').innerHTML = "❌ Erreur technique";
+      document.querySelector('p').innerHTML = "Vérifie ta connexion internet et réessaie plus tard.";
+      document.querySelector('.loader').style.display = 'none';
+    }
+  }
+  verifyToken();
+</script>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Memo Scan – Révisions</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#fff4e6;font-family:system-ui,sans-serif;padding:1rem}
+    .container{max-width:500px;margin:0 auto;background:white;border-radius:2rem;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.05)}
+    .header{background:#111218;color:white;padding:1.5rem;text-align:center}
+    .header h1{font-size:1.8rem}
+    .content{padding:1.5rem}
+    .stats{text-align:center;font-size:0.8rem;color:#9a3412;margin:1rem 0}
+    .day-counter{text-align:center;font-weight:bold;color:#f97316;margin-bottom:1rem}
+    .actions{display:flex;gap:10px;margin:1rem 0}
+    button{flex:1;background:#f97316;color:white;border:none;padding:12px;border-radius:40px;font-weight:bold;cursor:pointer}
+    .footer{text-align:center;font-size:0.7rem;color:#9a3412;padding:1rem;border-top:1px solid #fed7aa}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📖 Memo Scan</h1>
+  </div>
+  <div class="content">
+    <div id="dayCounter" class="day-counter"></div>
+    <div class="stats" id="statsDisplay">📊 0 visites · 0 scans · 0 modes</div>
+    <div class="actions">
+      <button id="cameraBtn">📸 Photo</button>
+      <button id="galleryBtn">🖼️ Galerie</button>
+    </div>
+    <div class="footer">Révise intelligemment · 14 jours gratuits</div>
+  </div>
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzNS30wu1SA-9UB2JxFcgYOpCR8wTysKoSU2mvQ3wWJFfmTC5lI6Ntol-DQ7Lz5tEtB/exec";
+  let stats = JSON.parse(localStorage.getItem('ms_stats')) || { visits: 0, scans: 0, modes: 0 };
+  stats.visits++;
+  localStorage.setItem('ms_stats', JSON.stringify(stats));
+  function updateStatsDisplay() {
+    document.getElementById('statsDisplay').innerHTML = `📊 ${stats.visits} visites · ${stats.scans} scans · ${stats.modes} modes`;
+  }
+  updateStatsDisplay();
+
+  // Récupère la date d'inscription depuis l'email (pour le compteur de jours)
+  // Ici, on va la demander au script Apps Script, mais pour simplifier, on utilise localStorage
+  // On suppose que la date d'inscription a été stockée lors du premier login via le token.
+  if (!localStorage.getItem('ms_signup_date')) {
+    // Si absente, on l'initialise aujourd'hui (pour la démo)
+    localStorage.setItem('ms_signup_date', new Date().toISOString().slice(0,10));
+  }
+  function getTrialDay() {
+    const signupDate = localStorage.getItem('ms_signup_date');
+    if (!signupDate) return null;
+    const start = new Date(signupDate);
+    const today = new Date();
+    const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
+    return Math.min(diffDays + 1, 14);
+  }
+  function updateDayCounter() {
+    const day = getTrialDay();
+    const container = document.getElementById('dayCounter');
+    if (day && day <= 14) {
+      container.innerHTML = `📅 Jour ${day}/14 de ton essai gratuit`;
+    } else if (day && day > 14) {
+      container.innerHTML = `✨ Ton essai est terminé. Abonne-toi pour continuer.`;
+    } else {
+      container.innerHTML = '';
+    }
+  }
+  updateDayCounter();
+
+  async function sendActivity(email, isExercice = false) {
+    if (!email) return;
+    try {
+      await fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `action=activity&email=${encodeURIComponent(email)}&exercice=${isExercice}`
+      });
+    } catch(e) { console.log('activity error', e); }
+  }
+
+  async function handleScan() {
+    const email = localStorage.getItem('ms_email');
+    if (!email) {
+      alert("Session expirée. Retourne à la page d'accueil.");
+      window.location.href = "https://babybebe974-arch.github.io/memoscan/index.html";
+      return;
+    }
+    stats.scans++;
+    localStorage.setItem('ms_stats', JSON.stringify(stats));
+    updateStatsDisplay();
+    await sendActivity(email, false);
+    alert("📸 Scan enregistré ! (Fonctionnalité d'analyse bientôt disponible)");
+    // Ici, tu pourras plus tard intégrer l'appel à ton Worker Cloudflare pour l'analyse IA.
+  }
+
+  document.getElementById('cameraBtn').addEventListener('click', handleScan);
+  document.getElementById('galleryBtn').addEventListener('click', handleScan);
+</script>
+</body>
+</html>

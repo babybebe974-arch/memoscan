@@ -3,22 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Memo Scan – Essai gratuit 14 jours</title>
+  <title>Memo Scan – Essai gratuit</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{background:#fff4e6;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
-    .card{background:white;max-width:480px;width:100%;padding:2rem 1.8rem;border-radius:2rem;text-align:center;border-top:6px solid #f97316}
+    .card{background:white;max-width:480px;width:100%;padding:2rem 1.8rem;border-radius:2rem;box-shadow:0 20px 35px -12px rgba(0,0,0,0.05);text-align:center;border-top:6px solid #f97316}
     .logo-icon{font-size:2.8rem;margin-bottom:0.25rem}
     h1{font-size:1.9rem;font-weight:700;color:#c2410c;margin-bottom:0.25rem}
     .sub{color:#f97316;font-weight:600;margin-bottom:1.8rem;font-size:0.95rem;border-bottom:1px solid #fed7aa;display:inline-block;padding-bottom:0.4rem}
-    input{width:100%;padding:14px 16px;margin:10px 0;border:1.5px solid #fed7aa;border-radius:40px;font-size:1rem;background:#fefefc;outline:none}
+    input{width:100%;padding:14px 16px;margin:10px 0;border:1.5px solid #fed7aa;border-radius:40px;font-size:1rem;background:#fefefc;transition:0.2s;outline:none}
     input:focus{border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,0.2)}
-    button{width:100%;background:#f97316;color:white;border:none;padding:14px;border-radius:40px;font-weight:700;font-size:1rem;margin-top:1.2rem;cursor:pointer}
+    button{width:100%;background:#f97316;color:white;border:none;padding:14px;border-radius:40px;font-weight:700;font-size:1rem;margin-top:1.2rem;cursor:pointer;transition:0.2s}
     button:hover{background:#ea580c;transform:scale(0.98)}
     .info-box{background:#fff0e6;border-radius:1rem;padding:1rem;margin:1rem 0;text-align:left}
     .info-box p{font-size:0.85rem;color:#7c2d12;margin-bottom:0.5rem}
-    .day-counter{margin-top:1rem;font-size:0.85rem;font-weight:600;color:#f97316;background:#fff4e6;display:inline-block;padding:0.3rem 1rem;border-radius:30px}
-    .stats{margin-top:1rem;font-size:0.7rem;color:#9a3412;border-top:1px solid #fed7aa;padding-top:1rem}
     .footer{margin-top:1rem;font-size:0.7rem;color:#9a3412}
   </style>
 </head>
@@ -36,77 +34,45 @@
     <p>🔗 Clique sur ce lien et tu seras automatiquement connecté(e) à ton espace de révision.</p>
     <p>🍃 14 jours gratuits, sans carte bancaire, sans engagement.</p>
   </div>
-
-  <div id="dayCounter" class="day-counter"></div>
-  <div class="stats" id="statsDisplay">📊 0 visites · 0 scans · 0 modes</div>
   <div class="footer">Memo Scan · Smart Learn — révise intelligemment</div>
 </div>
 
 <script>
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzNS30wu1SA-9UB2JxFcgYOpCR8wTysKoSU2mvQ3wWJFfmTC5lI6Ntol-DQ7Lz5tEtB/exec";
-  const WISE_URL   = "https://wise.com/pay/business/smartdesignforyoultd?currency=EUR";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7fb9JkGUHGtObE-WZm_mUZzbEWwUxWw7f2gNlI02pz0uK3oBGADSFFVNYyprEjaRZ/exec";
 
-  let stats = JSON.parse(localStorage.getItem('ms_stats')) || { visits: 0, scans: 0, modes: 0 };
-  stats.visits++;
-  localStorage.setItem('ms_stats', JSON.stringify(stats));
-  function updateStatsDisplay() {
-    document.getElementById('statsDisplay').innerHTML = `📊 ${stats.visits} visites · ${stats.scans} scans · ${stats.modes} modes`;
-  }
-  updateStatsDisplay();
-
-  function getTrialDay() {
-    const signupDate = localStorage.getItem('ms_signup_date');
-    if (!signupDate) return null;
-    const start = new Date(signupDate);
-    const today = new Date();
-    const diffDays = Math.floor((today - start) / (1000 * 60 * 60 * 24));
-    return Math.min(diffDays + 1, 14);
-  }
-  function updateDayCounter() {
-    const day = getTrialDay();
-    const container = document.getElementById('dayCounter');
-    if (day && day <= 14) {
-      container.innerHTML = `📅 Jour ${day}/14 de ton essai gratuit`;
-    } else if (day && day > 14) {
-      container.innerHTML = `✨ Ton essai est terminé. Abonne-toi pour continuer.`;
-    } else {
-      container.innerHTML = '';
-    }
-  }
-  updateDayCounter();
-
-  async function sendActivity(email) {
-    if (!email) return;
-    try {
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `action=activity&email=${encodeURIComponent(email)}&exercice=false`
-      });
-    } catch(e) { console.log('activity error', e); }
-  }
+  // Source depuis URL (?src=flyer, ?src=tiktok, ?src=facebook, ?src=bao)
+  const urlParams = new URLSearchParams(window.location.search);
+  const source = urlParams.get('src') || 'direct';
 
   document.getElementById('registerBtn').addEventListener('click', async () => {
     const email = document.getElementById('email').value.trim();
-    if (!email) {
-      alert("Veuillez renseigner ton email.");
+    if (!email || !email.includes('@')) {
+      alert("Entre une adresse email valide.");
       return;
     }
+
+    const btn = document.getElementById('registerBtn');
+    btn.textContent = "Inscription en cours...";
+    btn.disabled = true;
+
     try {
-      await fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `action=register&email=${encodeURIComponent(email)}`
-      });
-      // On ne stocke pas encore la date ici, car l'activation se fera après clic sur lien magique
-      // On redirige vers une page d'information
-      alert("✅ Un lien magique vient d’être envoyé à ton adresse email.\nClique sur ce lien pour activer ton compte et profiter de 14 jours gratuits.");
-      // Optionnel : rediriger vers une page d'attente
-      // window.location.href = "https://babybebe974-arch.github.io/memoscan/waiting.html";
+      const url = SCRIPT_URL + '?action=register&email=' + encodeURIComponent(email) + '&source=' + encodeURIComponent(source);
+      await fetch(url, { method: 'GET', mode: 'no-cors' });
+
+      localStorage.setItem('ms_email', email);
+      localStorage.setItem('ms_source', source);
+      localStorage.setItem('ms_trial_start', new Date().toISOString());
+
+      btn.textContent = "Essai active !";
+      alert("Ton essai gratuit de 14 jours est active !\n\nTu vas recevoir un email de confirmation.\nTu peux maintenant utiliser Memo Scan.");
+      document.getElementById('email').value = '';
+
+      setTimeout(() => { window.location.href = 'memoscan.html'; }, 2000);
+
     } catch (err) {
-      alert("Erreur lors de l'inscription. Réessaie plus tard.");
+      btn.textContent = "Activer mon essai gratuit";
+      btn.disabled = false;
+      alert("Erreur technique. Verifie ta connexion internet.");
       console.error(err);
     }
   });

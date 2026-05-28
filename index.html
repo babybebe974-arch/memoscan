@@ -3,77 +3,191 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Memo Scan – Essai gratuit</title>
+  <title>Memo Scan – 14 jours gratuits</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{background:#fff4e6;font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem}
-    .card{background:white;max-width:480px;width:100%;padding:2rem 1.8rem;border-radius:2rem;box-shadow:0 20px 35px -12px rgba(0,0,0,0.05);text-align:center;border-top:6px solid #f97316}
-    .logo-icon{font-size:2.8rem;margin-bottom:0.25rem}
-    h1{font-size:1.9rem;font-weight:700;color:#c2410c;margin-bottom:0.25rem}
-    .sub{color:#f97316;font-weight:600;margin-bottom:1.8rem;font-size:0.95rem;border-bottom:1px solid #fed7aa;display:inline-block;padding-bottom:0.4rem}
-    input{width:100%;padding:14px 16px;margin:10px 0;border:1.5px solid #fed7aa;border-radius:40px;font-size:1rem;background:#fefefc;transition:0.2s;outline:none}
-    input:focus{border-color:#f97316;box-shadow:0 0 0 3px rgba(249,115,22,0.2)}
-    button{width:100%;background:#f97316;color:white;border:none;padding:14px;border-radius:40px;font-weight:700;font-size:1rem;margin-top:1.2rem;cursor:pointer;transition:0.2s}
-    button:hover{background:#ea580c;transform:scale(0.98)}
-    .info-box{background:#fff0e6;border-radius:1rem;padding:1rem;margin:1rem 0;text-align:left}
-    .info-box p{font-size:0.85rem;color:#7c2d12;margin-bottom:0.5rem}
-    .footer{margin-top:1rem;font-size:0.7rem;color:#9a3412}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: white;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+
+    .card {
+      max-width: 520px;
+      width: 100%;
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem 1.8rem;
+      text-align: center;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo-icon {
+      background: #4f6ef7;
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 0.8rem auto;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      font-family: system-ui, sans-serif;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #4f6ef7;
+      margin-bottom: 0.5rem;
+    }
+
+    .sub {
+      font-size: 1rem;
+      color: #4a4f66;
+      margin-bottom: 1.8rem;
+      border-bottom: 1px solid #eceef5;
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px 18px;
+      margin: 8px 0;
+      border: 1.5px solid #e2e6f0;
+      border-radius: 60px;
+      font-size: 1rem;
+      background: #ffffff;
+      transition: 0.2s;
+      outline: none;
+      color: #111218;
+    }
+
+    input:focus {
+      border-color: #4f6ef7;
+      box-shadow: 0 0 0 3px rgba(79, 110, 247, 0.2);
+    }
+
+    button {
+      width: 100%;
+      background: #4f6ef7;
+      color: white;
+      border: none;
+      padding: 14px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1rem;
+      margin-top: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #3b5bdf;
+      transform: scale(0.98);
+    }
+
+    .info-box {
+      background: #f8faff;
+      border-radius: 1rem;
+      padding: 1rem;
+      margin: 1.2rem 0;
+      text-align: left;
+    }
+
+    .info-box p {
+      font-size: 0.85rem;
+      color: #4a4f66;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-box .highlight {
+      font-weight: 600;
+      color: #4f6ef7;
+    }
+
+    .footer-note {
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      color: #8b90a7;
+    }
+
+    button:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+      transform: none;
+    }
   </style>
 </head>
 <body>
 <div class="card">
-  <div class="logo-icon">📖</div>
+  <div class="logo-icon">MS</div>
   <h1>Memo Scan</h1>
-  <div class="sub">Crée ton compte pour un essai gratuit de 14 jours.</div>
+  <div class="sub">14 jours gratuits</div>
 
-  <input type="email" id="email" placeholder="Ton adresse email" autocomplete="email">
+  <input type="email" id="email" placeholder="ton.adresse@email.com" autocomplete="email">
   <button id="registerBtn">Activer mon essai gratuit</button>
 
   <div class="info-box">
-    <p>✉️ <strong>Pas de mot de passe à retenir</strong> – un <strong>lien magique</strong> va t’être envoyé immédiatement par email.</p>
-    <p>🔗 Clique sur ce lien et tu seras automatiquement connecté(e) à ton espace de révision.</p>
-    <p>🍃 14 jours gratuits, sans carte bancaire, sans engagement.</p>
+    <p>✉️ <span class="highlight">Lien magique</span> – Clique sur le lien reçu par email, tu seras connecté(e) instantanément.</p>
+    <p>🔁 <span class="highlight">14 jours gratuits</span> – Sans engagement, tu pourras continuer en abonnement à la fin de l’essai.</p>
   </div>
-  <div class="footer">Memo Scan · Smart Learn — révise intelligemment</div>
+  <div class="footer-note">
+    Memo Scan · Smart Learn — révisions augmentées
+  </div>
 </div>
 
 <script>
+  // URL de ton script Google Apps Script (déjà déployé)
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7fb9JkGUHGtObE-WZm_mUZzbEWwUxWw7f2gNlI02pz0uK3oBGADSFFVNYyprEjaRZ/exec";
 
-  // Source depuis URL (?src=flyer, ?src=tiktok, ?src=facebook, ?src=bao)
+  // Récupération de la source depuis l'URL (ex: ?src=flyer)
   const urlParams = new URLSearchParams(window.location.search);
   const source = urlParams.get('src') || 'direct';
 
-  document.getElementById('registerBtn').addEventListener('click', async () => {
-    const email = document.getElementById('email').value.trim();
+  const emailInput = document.getElementById('email');
+  const registerBtn = document.getElementById('registerBtn');
+
+  registerBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
     if (!email || !email.includes('@')) {
-      alert("Entre une adresse email valide.");
+      alert("Veuillez entrer une adresse email valide.");
       return;
     }
 
-    const btn = document.getElementById('registerBtn');
-    btn.textContent = "Inscription en cours...";
-    btn.disabled = true;
+    registerBtn.disabled = true;
+    registerBtn.textContent = "Inscription en cours...";
 
     try {
-      const url = SCRIPT_URL + '?action=register&email=' + encodeURIComponent(email) + '&source=' + encodeURIComponent(source);
+      // Requête GET (pas de CORS) avec les paramètres
+      const url = `${SCRIPT_URL}?action=register&email=${encodeURIComponent(email)}&source=${encodeURIComponent(source)}`;
       await fetch(url, { method: 'GET', mode: 'no-cors' });
 
+      // Stockage local pour une éventuelle utilisation ultérieure
       localStorage.setItem('ms_email', email);
       localStorage.setItem('ms_source', source);
       localStorage.setItem('ms_trial_start', new Date().toISOString());
 
-      btn.textContent = "Essai active !";
-      alert("Ton essai gratuit de 14 jours est active !\n\nTu vas recevoir un email de confirmation.\nTu peux maintenant utiliser Memo Scan.");
-      document.getElementById('email').value = '';
-
-      setTimeout(() => { window.location.href = 'memoscan.html'; }, 2000);
-
-    } catch (err) {
-      btn.textContent = "Activer mon essai gratuit";
-      btn.disabled = false;
-      alert("Erreur technique. Verifie ta connexion internet.");
-      console.error(err);
+      alert("✅ Un lien magique vient d'être envoyé à ton adresse email.\nClique dessus pour activer ton compte et commencer à réviser !");
+      emailInput.value = '';
+    } catch (error) {
+      console.error(error);
+      alert("❌ Erreur technique. Vérifie ta connexion internet ou réessaie plus tard.");
+    } finally {
+      registerBtn.disabled = false;
+      registerBtn.textContent = "Activer mon essai gratuit";
     }
   });
 </script>

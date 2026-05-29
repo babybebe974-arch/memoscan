@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Memo Scan – Révisions</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:#f8faff;font-family:system-ui,sans-serif;padding:1rem}
+    .container{max-width:500px;margin:0 auto;background:white;border-radius:2rem;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.05)}
+    .header{background:#111218;color:white;padding:1.5rem;text-align:center}
+    .header h1{font-size:1.8rem}
+    .content{padding:1.5rem}
+    .day-counter{text-align:center;font-weight:bold;color:#4f6ef7;margin-bottom:1rem}
+    .stats{text-align:center;font-size:0.8rem;color:#4a4f66;margin:1rem 0}
+    .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+    .mbtn{background:white;border:1.5px solid #eceef5;border-radius:1rem;padding:12px 8px;cursor:pointer;text-align:center;transition:all 0.1s}
+    .mbtn.on{background:#4f6ef7;border-color:#4f6ef7;color:white}
+    .carea{margin-top:1.5rem}
+    .ccard{background:white;border:1.5px solid #eceef5;border-radius:1rem;padding:1rem;margin-bottom:1rem}
+    .kpc{background:#f8faff;border-radius:1rem;padding:0.8rem;margin-bottom:0.5rem}
+    .fcwrap{perspective:800px;height:180px;cursor:pointer;margin-bottom:10px}
+    .fcin{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform 0.4s}
+    .fcin.fl{transform:rotateY(180deg)}
+    .fcf{position:absolute;inset:0;backface-visibility:hidden;border-radius:1rem;display:flex;align-items:center;justify-content:center;padding:1rem;text-align:center}
+    .fcfront{background:#111218;color:white}
+    .fcback{background:#4f6ef7;color:white;transform:rotateY(180deg)}
+    .qblock{background:white;border:1.5px solid #eceef5;border-radius:1rem;padding:1rem;margin-bottom:1rem}
+    .opt{padding:10px;border:1px solid #e2e6f0;border-radius:2rem;margin:5px 0;cursor:pointer}
+    .opt.ok{background:#e6faf2;border-color:#00c48c}
+    .opt.ko{background:#fff0f3;border-color:#ff4757}
+    .badge{background:#f5a623;color:white;border-radius:2rem;padding:4px 12px;font-size:0.7rem;display:inline-block;margin-bottom:0.5rem}
+    .info-box{background:#fff0e6;border-radius:1rem;padding:0.8rem;margin-top:1rem;font-size:0.8rem}
+    .btn-explain{background:#4f6ef7;color:white;border:none;border-radius:2rem;padding:6px 12px;font-size:0.7rem;cursor:pointer;margin-left:8px}
+    .banner-relance{background:#fff0e6;border-left:4px solid #f5a623;padding:10px;margin:10px 0;font-size:0.85rem;border-radius:8px}
+    .footer{text-align:center;font-size:0.7rem;color:#8b90a7;padding:1rem;border-top:1px solid #eceef5}
+    button:disabled{opacity:0.6;cursor:not-allowed}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📖 Memo Scan</h1>
+  </div>
+  <div class="content">
+    <div id="dayCounter" class="day-counter"></div>
+    <div class="stats" id="statsDisplay">📊 0 visites · 0 scans · 0 modes</div>
+    
+    <div class="mgrid" id="modeGrid">
+      <button class="mbtn" data-mode="cours" onclick="setMode('cours')">📋 Cours corrigé</button>
+      <button class="mbtn" data-mode="resume" onclick="setMode('resume')">🗂️ Résumé visuel</button>
+      <button class="mbtn" data-mode="mindmap" onclick="setMode('mindmap')">🗺️ Mind Map</button>
+      <button class="mbtn" data-mode="flashcard" onclick="setMode('flashcard')">🃏 Flashcards</button>
+      <button class="mbtn" data-mode="qcm" onclick="setMode('qcm')">✅ QCM</button>
+      <button class="mbtn" data-mode="exercise" onclick="setMode('exercise')">🧮 Exercices</button>
+      <button class="mbtn" data-mode="open" onclick="setMode('open')">✍️ Questions ouvertes</button>
+      <button class="mbtn" data-mode="interro" onclick="setMode('interro')">⏱️ Interro chrono</button>
+    </div>
+    
+    <div id="carea" class="carea"></div>
+    <div class="footer">Révise intelligemment · 14 jours gratuits</div>
+  </div>
+</div>
+
+<script>
+  // ==================== CONFIGURATION ====================
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyGB_J6BzqhD4unqPePZw6LjP6p8D2n9arvKhE9DzIvVrmOIVppDurlsqJE-TRjZi8DVw/exec";
+  const WISE_URL = "https://wise.com/pay/business/smartdesignforyoultd?currency=EUR";
+
+  // ==================== DONNÉES SIMULÉES ====================
+  let appData = {
+    topic: "La photosynthèse",
+    corrected_course: "<h2>La photosynthèse</h2><p>La photosynthèse est le processus par lequel les plantes fabriquent leur propre nourriture à partir de la lumière, de l'eau et du CO2.</p>",
+    key_points: ["Les plantes captent la lumière", "Elles absorbent l'eau par les racines", "Le CO2 entre par les feuilles", "Elles produisent du glucose et de l'oxygène"],
+    definition: "La photosynthèse : transformation de l'énergie lumineuse en énergie chimique.",
+    to_remember: ["La photosynthèse a lieu dans les chloroplastes", "Elle produit de l'oxygène", "Elle est essentielle pour la vie sur Terre"],
+    flashcards: [
+      {question: "Qu'est-ce que la photosynthèse ?", answer: "Processus par lequel les plantes fabriquent leur propre nourriture à partir de lumière, eau et CO2."},
+      {question: "Quels sont les trois éléments nécessaires à la photosynthèse ?", answer: "La lumière, l'eau, le dioxyde de carbone (CO2)."},
+      {question: "Où a lieu la photosynthèse ?", answer: "Dans les chloroplastes des feuilles."},
+      {question: "Quels sont les produits de la photosynthèse ?", answer: "Le glucose (sucre) et l'oxygène."},
+      {question: "Pourquoi la photosynthèse est-elle importante pour la vie ?", answer: "Elle produit l'oxygène que nous respirons."}
+    ],
+    qcm: [
+      {question: "Quel gaz est absorbé par la plante pour la photosynthèse ?", options: ["Dioxygène", "Dioxyde de carbone", "Azote", "Hydrogène"], correct: 1, explanation: "Les plantes absorbent le CO2 (dioxyde de carbone) et rejettent de l'oxygène."},
+      {question: "Où se déroule la photosynthèse dans la cellule végétale ?", options: ["Noyau", "Mitochondrie", "Chloroplaste", "Vacuole"], correct: 2, explanation: "La photosynthèse a lieu dans les chloroplastes, qui contiennent de la chlorophylle."},
+      {question: "Quel est le produit principal de la photosynthèse ?", options: ["Eau", "Dioxyde de carbone", "Glucose", "Chlorophylle"], correct: 2, explanation: "Le glucose est le sucre produit lors de la photosynthèse."}
+    ],
+    open_questions: [{question: "Explique pourquoi les plantes sont essentielles pour la vie sur Terre.", model_answer: "Elles produisent l'oxygène que nous respirons et sont la base de la chaîne alimentaire."}],
+    exercises: [{tag: "Application", statement: "Si une plante est placée dans une pièce sans lumière pendant une semaine, que se passe-t-il ?", solution: "Elle ne peut pas faire de photosynthèse, elle jaunit et finit par mourir."}],
+    mindmap: {center: "Photosynthèse", branches: [{label: "Éléments", leaves: ["Lumière", "Eau", "CO2"]}, {label: "Produits", leaves: ["Glucose", "Oxygène"]}]},
+    interro: [{question: "Cite les trois éléments essentiels à la photosynthèse.", answer: "Lumière, eau, dioxyde de carbone."}]
+  };
+
+  let currentMode = null;
+  let qcmA = {};
+  let explainCount = JSON.parse(localStorage.getItem('ms_explain_count')) || 0;
+  let badgeUnlocked = localStorage.getItem('ms_badge_explain') === 'true';
+  let trialStartDate = null;
+  let deviceId = null;
+  let userStatus = 'ACTIF';
+  let activeDays = 0;
+  let reviewAsked = false;
+  let daysSinceStart = 0;
+
+  let stats = JSON.parse(localStorage.getItem('ms_stats')) || { visits: 0, scans: 0, modes: 0 };
+  stats.visits++;
+  localStorage.setItem('ms_stats', JSON.stringify(stats));
+  function updateStatsDisplay() {
+    document.getElementById('statsDisplay').innerHTML = `📊 ${stats.visits} visites · ${stats.scans} scans · ${stats.modes} modes`;
+  }
+  updateStatsDisplay();
+
+  async function getDeviceId() {
+    const fingerprint = [
+      navigator.userAgent,
+      navigator.language,
+      screen.width + 'x' + screen.height,
+      Intl.DateTimeFormat().resolvedOptions().timeZone
+    ].join('|');
+    const hashBuffer = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(fingerprint));
+    return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2,'0')).join('').substring(0,32);
+  }
+
+  async function loadUserData() {
+    deviceId = localStorage.getItem('ms_device_id');
+    if (!deviceId) {
+      deviceId = await getDeviceId();
+      localStorage.setItem('ms_device_id', deviceId);
+    }
+    try {
+      const response = await fetch(`${SCRIPT_URL}?action=getStartDate&id=${deviceId}`);
+      const startDateStr = await response.text();
+      if (startDateStr && startDateStr !== 'INCONNU') {
+        trialStartDate = new Date(startDateStr);
+        localStorage.setItem('ms_trial_start', startDateStr);
+      } else {
+        await fetch(`${SCRIPT_URL}?action=register&id=${deviceId}`, { mode: 'no-cors' });
+        const now = new Date().toISOString();
+        trialStartDate = new Date(now);
+        localStorage.setItem('ms_trial_start', now);
+      }
+      userStatus = localStorage.getItem('ms_status') || 'ACTIF';
+    } catch(e) {
+      const localStart = localStorage.getItem('ms_trial_start');
+      if (localStart) trialStartDate = new Date(localStart);
+      userStatus = localStorage.getItem('ms_status') || 'ACTIF';
+    }
+    if (trialStartDate) {
+      const diffDays = Math.floor((new Date() - trialStartDate) / (1000*60*60*24));
+      daysSinceStart = diffDays + 1;
+    } else daysSinceStart = 0;
+    activeDays = parseInt(localStorage.getItem('ms_active_days')) || 0;
+    reviewAsked = localStorage.getItem('ms_review_shown') === 'true';
+  }
+
+  function getDaysRemaining() { return Math.max(0, 14 - daysSinceStart); }
+  function isTrialActive() { return userStatus !== 'PAYÉ' && daysSinceStart <= 14; }
+  function isBlocked() { return userStatus !== 'PAYÉ' && daysSinceStart > 14; }
+
+  function showRelanceBanner() {
+    if (userStatus === 'PAYÉ') return '';
+    if (daysSinceStart === 7) return `<div class="banner-relance">📢 Tu utilises Memo Scan depuis une semaine. Pour continuer à progresser, pense à ton abonnement (29€/an). Profite encore de 7 jours gratuits.</div>`;
+    if (daysSinceStart === 12) return `<div class="banner-relance">⏰ Plus que 2 jours ! Ton accès gratuit se termine bientôt. Abonne-toi maintenant pour ne pas perdre tes progrès.</div>`;
+    if (daysSinceStart === 13) return `<div class="banner-relance">🔥 Dernier jour demain ! Abonne-toi pour 29€/an (2,42€/mois) et continue à réviser sans interruption.</div>`;
+    if (daysSinceStart === 14) return `<div class="banner-relance">⚠️ Dernier jour de ton essai. <a href="#" id="subscribeLinkNow">Abonne-toi ici</a> pour continuer.</div>`;
+    if (daysSinceStart > 14 && userStatus !== 'PAYÉ') return `<div class="banner-relance" style="background:#ffe6e6; border-left-color:#ff4757;">❌ Ton essai est terminé. Pour réactiver ton compte, <a href="#" id="subscribeLinkBlocked">abonne-toi</a>.</div>`;
+    return '';
+  }
+
+  function showReviewBanner() {
+    if (reviewAsked) return '';
+    if (activeDays >= 3 && userStatus !== 'PAYÉ') {
+      reviewAsked = true;
+      localStorage.setItem('ms_review_shown', 'true');
+      return `<div class="banner-relance" style="background:#e6faf2; border-left-color:#00c48c;">
+                ⭐ Tu utilises Memo Scan régulièrement. Si l’app t’aide, une petite étoile sur Google nous donne beaucoup de force. Merci !<br>
+                <a href="https://g.page/r/TON_LIEN" target="_blank" style="color:#00c48c; font-weight:bold;">👉 Donner 5 étoiles</a>
+              </div>`;
+    }
+    return '';
+  }
+
+  // Envoi d'une activité (scan ou exercice) au script pour comptabiliser les coûts
+  async function registerActivity(type) {
+    if (!deviceId) return;
+    const todayStr = new Date().toISOString().slice(0,10);
+    const lastActive = localStorage.getItem('ms_last_active');
+    if (lastActive !== todayStr) {
+      activeDays++;
+      localStorage.setItem('ms_active_days', activeDays);
+      localStorage.setItem('ms_last_active', todayStr);
+    }
+    await fetch(`${SCRIPT_URL}?action=activity&id=${deviceId}&type=${type}`, { mode: 'no-cors' });
+  }
+
+  // ==================== MODES D'ÉTUDE ====================
+  function setMode(mode) {
+    if (isBlocked()) {
+      alert("Ton essai gratuit est terminé. Abonne-toi pour continuer à réviser.");
+      return;
+    }
+    currentMode = mode;
+    stats.modes++;
+    localStorage.setItem('ms_stats', JSON.stringify(stats));
+    updateStatsDisplay();
+    document.querySelectorAll('.mbtn').forEach(b => b.classList.remove('on'));
+    document.querySelector(`[data-mode="${mode}"]`).classList.add('on');
+    registerActivity(mode === 'exercise' ? 'exercice' : 'scan'); // On envoie 'scan' pour la plupart, 'exercice' pour le mode exercice
+    if (mode === 'cours') rCours();
+    else if (mode === 'resume') rResume();
+    else if (mode === 'mindmap') rMindmap();
+    else if (mode === 'flashcard') { fcI=0; fcF=false; rFlashcard(); }
+    else if (mode === 'qcm') rQCM();
+    else if (mode === 'exercise') rExercise();
+    else if (mode === 'open') rOpen();
+    else if (mode === 'interro') rInterro();
+  }
+
+  function rCours() {
+    let html = `<div class="ccard">${appData.corrected_course}</div><button class="btn-explain" onclick="explainOutLoud(\`${appData.corrected_course.replace(/<[^>]*>/g, '')}\`, 'cours')">🎤 Explique ce cours à voix haute</button>`;
+    document.getElementById('carea').innerHTML = html;
+  }
+  function rResume() {
+    let html = `<div class="ccard"><strong>${appData.topic}</strong><br>${appData.key_points.map(p => `• ${p}`).join('<br>')}</div>`;
+    if (appData.definition) html += `<div class="ccard"><strong>Définition</strong><br>${appData.definition}</div>`;
+    html += `<button class="btn-explain" onclick="explainOutLoud('${appData.topic} : ${appData.key_points.join(', ')}', 'resume')">🎤 Explique ce résumé à voix haute</button>`;
+    document.getElementById('carea').innerHTML = html;
+  }
+  function rMindmap() {
+    let html = `<div class="ccard"><strong>${appData.mindmap.center}</strong><br>`;
+    appData.mindmap.branches.forEach(b => { html += `<br><strong>${b.label}</strong><br>${b.leaves.map(l => `• ${l}`).join('<br>')}`; });
+    html += `</div><button class="btn-explain" onclick="explainOutLoud('${appData.mindmap.center}', 'mindmap')">🎤 Explique cette carte mentale à voix haute</button>`;
+    document.getElementById('carea').innerHTML = html;
+  }
+
+  let fcI=0, fcF=false;
+  function rFlashcard() {
+    const c = appData.flashcards[fcI];
+    const dots = appData.flashcards.map((_,i) => `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${i===fcI?'#4f6ef7':'#e2e6f0'};margin:0 3px"></span>`).join('');
+    let html = `
+      <div class="fcwrap" onclick="flipFC()"><div class="fcin${fcF?' fl':''}"><div class="fcf fcfront">${c.question}</div><div class="fcf fcback">${c.answer}</div></div></div>
+      <div style="display:flex; justify-content:space-between; margin-top:0.5rem"><button onclick="goFC(-1)">◀</button><div>${dots}</div><button onclick="goFC(1)">▶</button></div>
+      <button class="btn-explain" style="margin-top:8px;width:100%" onclick="explainOutLoud('${c.answer}', 'flashcard')">🎤 Explique la réponse à voix haute</button>
+    `;
+    document.getElementById('carea').innerHTML = html;
+  }
+  function flipFC() { fcF=!fcF; rFlashcard(); }
+  function goFC(d) { fcI=(fcI+d+appData.flashcards.length)%appData.flashcards.length; fcF=false; rFlashcard(); }
+
+  function rQCM() {
+    let html = '';
+    appData.qcm.forEach((q, qi) => {
+      const selected = qcmA[qi];
+      html += `<div class="qblock"><strong>${q.question}</strong><br>`;
+      q.options.forEach((opt, oi) => {
+        let cls = 'opt';
+        if (selected !== undefined) {
+          if (oi === q.correct) cls += ' ok';
+          else if (oi === selected && oi !== q.correct) cls += ' ko';
+        }
+        html += `<div class="${cls}" onclick="if(qcmA[${qi}]===undefined) selectQCM(${qi},${oi})">${String.fromCharCode(65+oi)}. ${opt}</div>`;
+      });
+      html += `</div>`;
+      if (selected !== undefined) {
+        const isCorrect = (selected === q.correct);
+        html += `<div class="info-box" style="background:${isCorrect?'#e6faf2':'#fff0e3'}">${isCorrect ? '✅ Bonne réponse' : '❌ Mauvaise réponse'} — ${q.explanation}</div>`;
+      }
+    });
+    const answered = Object.keys(qcmA).length;
+    if (answered === appData.qcm.length) {
+      const correct = Object.entries(qcmA).filter(([qi, ans]) => ans === appData.qcm[parseInt(qi)].correct).length;
+      const percent = Math.round(correct/answered*100);
+      if (percent < 70) {
+        html += `<div class="info-box" style="background:#fff0e6;">
+          <strong>📉 Résultat : ${correct}/${answered} (${percent}%)</strong><br>
+          Moins de 70 % signifie que les bases ne sont pas encore solides. Pas de panique, c’est fréquent.<br>
+          🔁 <a href="#" onclick="setMode('cours'); return false;">Retourne au Cours corrigé</a> et aux <a href="#" onclick="setMode('flashcard'); return false;">Flashcards</a>, puis refais ce QCM.<br>
+          📸 Astuce : prends un screenshot des questions où tu as échoué – cela t’aidera à les mémoriser.
+        </div>`;
+      } else {
+        html += `<div class="info-box" style="background:#e6faf2;">
+          <strong>📈 Résultat : ${correct}/${answered} (${percent}%) – Bien !</strong><br>
+          Tu commences à maîtriser. Pour aller plus loin :<br>
+          🔁 Essaie les <a href="#" onclick="setMode('exercise'); return false;">Exercices</a>.<br>
+          🧠 Astuce : cache la réponse et explique‑la à voix haute.
+        </div>`;
+      }
+    }
+    document.getElementById('carea').innerHTML = html;
+  }
+  function selectQCM(qi, oi) {
+    if (qcmA[qi] !== undefined) return;
+    qcmA[qi] = oi;
+    rQCM();
+    registerActivity('scan');
+  }
+
+  function rExercise() {
+    let html = '';
+    appData.exercises.forEach((ex, i) => {
+      html += `<div class="ccard"><strong>${ex.tag}</strong><br>${ex.statement}<br><button class="btn-explain" style="margin-top:8px" onclick="alert('Solution : ${ex.solution}')">👁 Voir la correction</button></div>`;
+    });
+    document.getElementById('carea').innerHTML = html;
+    // On envoie une activité exercice (coût spécifique)
+    registerActivity('exercice');
+  }
+  function rOpen() {
+    let html = '';
+    appData.open_questions.forEach((q, i) => {
+      html += `<div class="ccard"><strong>${q.question}</strong><br><textarea rows="3" style="width:100%; margin:8px 0; border-radius:1rem; padding:8px" placeholder="Écris ta réponse..."></textarea><button class="btn-explain" onclick="alert('Réponse attendue : ${q.model_answer}')">📖 Voir la correction</button></div>`;
+    });
+    document.getElementById('carea').innerHTML = html;
+  }
+  function rInterro() {
+    document.getElementById('carea').innerHTML = `<div class="ccard">⏱️ Mode interro chrono à venir.<br>Simule une épreuve chronométrée sur l’ensemble des connaissances.</div>`;
+  }
+
+  window.explainOutLoud = function(text, type) {
+    explainCount++;
+    localStorage.setItem('ms_explain_count', explainCount);
+    if (explainCount >= 3 && !badgeUnlocked) {
+      badgeUnlocked = true;
+      localStorage.setItem('ms_badge_explain', 'true');
+      alert("🎤 Félicitations ! Tu as débloqué le badge « Prof en herbe » (avoir expliqué à voix haute 3 fois).");
+    }
+    alert(`🎤 Voici le contenu à expliquer à voix haute :\n\n"${text.substring(0, 200)}"\n\n📢 Prends une grande respiration et explique-le maintenant, comme si tu l’enseignais à un camarade.`);
+  };
+
+  function renderBanners() {
+    let html = showRelanceBanner() + showReviewBanner();
+    if (html) {
+      let bannerDiv = document.getElementById('dynamicBanners');
+      if (!bannerDiv) {
+        bannerDiv = document.createElement('div');
+        bannerDiv.id = 'dynamicBanners';
+        const carea = document.getElementById('carea');
+        if (carea) carea.parentNode.insertBefore(bannerDiv, carea);
+      }
+      bannerDiv.innerHTML = html;
+      document.querySelectorAll('#subscribeLinkNow, #subscribeLinkBlocked').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          window.location.href = WISE_URL;
+        });
+      });
+    }
+  }
+
+  async function init() {
+    await loadUserData();
+    const dayCounter = document.getElementById('dayCounter');
+    if (userStatus === 'PAYÉ') dayCounter.innerHTML = `✨ Abonnement actif – accès illimité ✨`;
+    else if (daysSinceStart <= 14) {
+      const remaining = getDaysRemaining();
+      dayCounter.innerHTML = `📅 Jour ${daysSinceStart}/14 – plus que ${remaining} jour${remaining>1?'s':''} d’essai`;
+    } else dayCounter.innerHTML = `⛔ Essai terminé – abonne-toi pour continuer`;
+    renderBanners();
+    if (badgeUnlocked && !document.querySelector('.badge')) {
+      const badgeDiv = document.createElement('div');
+      badgeDiv.className = 'badge';
+      badgeDiv.innerText = '🎤 Prof en herbe';
+      document.querySelector('.content').insertBefore(badgeDiv, document.getElementById('modeGrid'));
+    }
+  }
+  init();
+</script>
+</body>
+</html>
